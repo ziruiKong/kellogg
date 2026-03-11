@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ChevronDown, Globe, Headphones, Menu as MenuIcon, Briefcase, X, ArrowRight } from 'lucide-react';
+import { HQMap } from './components/HQMap';
 
 const JOBS = [
   {
@@ -175,7 +176,7 @@ const Section = ({ title, subtitle, bgImage, buttons, isFirst, index, setActiveS
     <motion.section 
       onViewportEnter={() => setActiveSection(index)}
       viewport={{ amount: 0.5 }}
-      className="h-screen w-full snap-start snap-always relative flex flex-col items-center justify-between pt-[18vh] pb-12 overflow-hidden"
+      className={`h-screen w-full snap-start snap-always relative flex flex-col ${isFirst ? 'items-start justify-center px-10 md:px-24' : 'items-center justify-between pt-[18vh] pb-12'} overflow-hidden`}
     >
       {/* Background with Cinematic Scale */}
       <div className="absolute inset-0 z-0 overflow-hidden bg-black">
@@ -188,7 +189,7 @@ const Section = ({ title, subtitle, bgImage, buttons, isFirst, index, setActiveS
           className="w-full h-full object-cover" 
         />
         <div className="absolute inset-0 bg-black/20" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/60" />
+        <div className={`absolute inset-0 ${isFirst ? 'bg-gradient-to-r from-black/80 via-black/40 to-transparent' : 'bg-gradient-to-b from-black/60 via-transparent to-black/60'}`} />
       </div>
 
       {/* Text Content */}
@@ -197,24 +198,31 @@ const Section = ({ title, subtitle, bgImage, buttons, isFirst, index, setActiveS
         initial="hidden"
         whileInView="visible"
         viewport={{ amount: 0.5, once: isFirst }}
-        className="relative z-10 text-center text-white px-4"
+        className={`relative z-10 text-white ${isFirst ? 'text-left max-w-4xl' : 'text-center px-4'}`}
       >
-        <motion.h1 variants={itemVariants} className={`${isFirst ? 'text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight' : 'text-4xl md:text-[44px] font-medium tracking-[0.1em]'} mb-3 drop-shadow-lg`}>
+        <motion.h1 variants={itemVariants} className={`${isFirst ? 'text-5xl md:text-7xl lg:text-[80px] font-bold tracking-tight leading-tight' : 'text-4xl md:text-[44px] font-medium tracking-[0.1em]'} mb-3 drop-shadow-lg`}>
           {title}
         </motion.h1>
-        <motion.p variants={itemVariants} className={`${isFirst ? 'text-lg md:text-2xl font-light tracking-wide' : 'text-[14px] md:text-[15px] font-normal tracking-wide'} text-white/90 drop-shadow-md`}>
-          {subtitle}
-        </motion.p>
+        
+        {isFirst && (
+          <motion.div variants={itemVariants} className="w-16 h-1 bg-[#e63946] mb-6 mt-4" />
+        )}
+
+        {subtitle && (
+          <motion.p variants={itemVariants} className={`${isFirst ? 'text-lg md:text-2xl font-light tracking-wide' : 'text-[14px] md:text-[15px] font-normal tracking-wide'} text-white/90 drop-shadow-md`}>
+            {subtitle}
+          </motion.p>
+        )}
       </motion.div>
 
       {/* Buttons & Footer */}
-      <div className="relative z-10 w-full flex flex-col items-center px-6">
+      <div className={`relative z-10 w-full flex flex-col ${isFirst ? 'items-start mt-8' : 'items-center px-6'}`}>
         <motion.div 
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ amount: 0.5, once: isFirst }}
-          className="flex flex-col md:flex-row gap-4 md:gap-6 w-full max-w-md md:max-w-2xl justify-center"
+          className={`flex flex-col md:flex-row gap-4 md:gap-6 w-full ${isFirst ? 'max-w-md' : 'max-w-md md:max-w-2xl justify-center'}`}
         >
           {buttons.map((btn: any, i: number) => (
             <motion.button 
@@ -223,13 +231,16 @@ const Section = ({ title, subtitle, bgImage, buttons, isFirst, index, setActiveS
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               transition={{ type: "spring", stiffness: 400, damping: 25 }}
-              className={`relative overflow-hidden group w-full md:w-64 ${isFirst ? 'py-3.5' : 'py-2.5'} px-4 rounded text-[13px] font-medium tracking-wide backdrop-blur-sm transition-all duration-300 ${
-                btn.primary 
-                  ? 'bg-[#f4f4f4] text-[#393c41] shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.25)] hover:bg-white' 
-                  : 'bg-[#171a20]/65 text-white border border-white/5 hover:border-white/20 hover:bg-[#171a20]/80'
+              className={`relative overflow-hidden group flex items-center justify-center gap-2 ${isFirst ? 'w-auto py-3 px-8' : 'w-full md:w-64 py-2.5 px-4'} rounded-sm text-[15px] font-medium tracking-wide backdrop-blur-sm transition-all duration-300 ${
+                btn.variant === 'red'
+                  ? 'bg-[#e63946] text-white hover:bg-[#d62828] shadow-[0_0_20px_rgba(230,57,70,0.3)]'
+                  : btn.primary 
+                    ? 'bg-[#f4f4f4] text-[#393c41] shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.25)] hover:bg-white' 
+                    : 'bg-[#171a20]/65 text-white border border-white/5 hover:border-white/20 hover:bg-[#171a20]/80'
               }`}
             >
               <span className="relative z-10">{btn.text}</span>
+              {btn.icon === 'arrow-right' && <ArrowRight className="w-4 h-4 relative z-10" />}
               {/* Shimmer effect for primary button */}
               {btn.primary && (
                 <motion.div 
@@ -247,7 +258,7 @@ const Section = ({ title, subtitle, bgImage, buttons, isFirst, index, setActiveS
             initial={{ opacity: 0 }}
             animate={{ opacity: 1, y: [0, 8, 0] }}
             transition={{ opacity: { delay: 2, duration: 1 }, y: { repeat: Infinity, duration: 2, ease: "easeInOut" } }}
-            className="mt-10 text-white/70"
+            className="absolute bottom-12 left-1/2 -translate-x-1/2 text-white/70"
           >
             <ChevronDown className="w-10 h-10" strokeWidth={1} />
           </motion.div>
@@ -386,12 +397,11 @@ export default function App() {
 
   const sections = [
     {
-      title: "凯洛格精密",
-      subtitle: "以工程重塑精密未来",
-      bgImage: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?q=80&w=2070&auto=format&fit=crop",
+      title: "携手共创美好未来",
+      subtitle: "",
+      bgImage: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop",
       buttons: [
-        { text: "探索核心能力", primary: true },
-        { text: "投资者关系", primary: false }
+        { text: "了解更多", variant: "red", icon: "arrow-right" }
       ]
     },
     {
@@ -434,7 +444,7 @@ export default function App() {
   return (
     <div className="h-screen w-full overflow-y-auto snap-y snap-mandatory no-scrollbar bg-black font-sans selection:bg-white selection:text-black">
       <Navbar onAction={setActiveModal} activeSection={activeSection} />
-      <SideIndicator total={sections.length + 1} current={activeSection} />
+      <SideIndicator total={sections.length + 2} current={activeSection} />
       {sections.map((section, index) => (
         <Section 
           key={index}
@@ -444,7 +454,8 @@ export default function App() {
           isFirst={index === 0}
         />
       ))}
-      <NewsSection index={sections.length} setActiveSection={setActiveSection} />
+      <HQMap index={sections.length} setActiveSection={setActiveSection} />
+      <NewsSection index={sections.length + 1} setActiveSection={setActiveSection} />
 
       <AnimatePresence>
         {activeModal && (
