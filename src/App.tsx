@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import React, { useState, useRef } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'motion/react';
 import { ChevronDown, Globe, Headphones, Menu as MenuIcon, Briefcase, X, ArrowRight } from 'lucide-react';
 import { HQMap } from './components/HQMap';
+import { HorizontalShowcase } from './components/HorizontalShowcase';
 
 const JOBS = [
   {
@@ -152,7 +153,30 @@ const SideIndicator = ({ total, current }: { total: number, current: number }) =
   </div>
 );
 
-const Section = ({ title, subtitle, bgImage, buttons, isFirst, index, setActiveSection }: any) => {
+const Section = ({ title, subtitle, bgImage, buttons, isFirst, index, setActiveSection, scrollContainerRef }: any) => {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    container: scrollContainerRef,
+    offset: ["start end", "end start"]
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
+  const yBg = useTransform(smoothProgress, [0, 1], ["-20%", "20%"]);
+  const opacityContent = useTransform(smoothProgress, [0.2, 0.5, 0.8], [0, 1, 0]);
+  const yContent = useTransform(smoothProgress, [0, 1], ["20%", "-20%"]);
+
+  const opacityFirst = useTransform(smoothProgress, [0.5, 0.8], [1, 0]);
+  const yFirst = useTransform(smoothProgress, [0.5, 1], ["0%", "-30%"]);
+
+  const contentOpacity = isFirst ? opacityFirst : opacityContent;
+  const contentY = isFirst ? yFirst : yContent;
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -174,19 +198,21 @@ const Section = ({ title, subtitle, bgImage, buttons, isFirst, index, setActiveS
 
   return (
     <motion.section 
+      ref={ref}
       onViewportEnter={() => setActiveSection(index)}
-      viewport={{ amount: 0.5 }}
+      viewport={{ amount: 0.5, root: scrollContainerRef }}
       className={`h-screen w-full snap-start snap-always relative flex flex-col ${isFirst ? 'items-start justify-center px-10 md:px-24' : 'items-center justify-between pt-[18vh] pb-12'} overflow-hidden`}
     >
       {/* Background with Cinematic Scale */}
       <div className="absolute inset-0 z-0 overflow-hidden bg-black">
         <motion.img 
-          initial={{ scale: isFirst ? 1.2 : 1.15, opacity: isFirst ? 0.4 : 0.6 }}
-          whileInView={{ scale: 1, opacity: 1 }}
-          transition={{ duration: isFirst ? 2.5 : 1.8, ease: "easeOut" }}
+          style={{ y: yBg, scale: 1.2 }}
+          initial={isFirst ? { scale: 1.2, opacity: 0.4 } : false}
+          animate={isFirst ? { scale: 1.2, opacity: 1 } : false}
+          transition={{ duration: 2.5, ease: "easeOut" }}
           src={bgImage} 
           alt={title} 
-          className="w-full h-full object-cover" 
+          className="w-full h-full object-cover origin-center" 
         />
         <div className="absolute inset-0 bg-black/20" />
         <div className={`absolute inset-0 ${isFirst ? 'bg-gradient-to-r from-black/80 via-black/40 to-transparent' : 'bg-gradient-to-b from-black/60 via-transparent to-black/60'}`} />
@@ -194,82 +220,102 @@ const Section = ({ title, subtitle, bgImage, buttons, isFirst, index, setActiveS
 
       {/* Text Content */}
       <motion.div 
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ amount: 0.5, once: isFirst }}
-        className={`relative z-10 text-white ${isFirst ? 'text-left max-w-4xl' : 'text-center px-4'}`}
+        style={{ opacity: contentOpacity, y: contentY }}
+        className="relative z-10 w-full flex flex-col h-full justify-center"
       >
-        <motion.h1 variants={itemVariants} className={`${isFirst ? 'text-5xl md:text-7xl lg:text-[80px] font-bold tracking-tight leading-tight' : 'text-4xl md:text-[44px] font-medium tracking-[0.1em]'} mb-3 drop-shadow-lg`}>
-          {title}
-        </motion.h1>
-        
-        {isFirst && (
-          <motion.div variants={itemVariants} className="w-16 h-1 bg-[#e63946] mb-6 mt-4" />
-        )}
-
-        {subtitle && (
-          <motion.p variants={itemVariants} className={`${isFirst ? 'text-lg md:text-2xl font-light tracking-wide' : 'text-[14px] md:text-[15px] font-normal tracking-wide'} text-white/90 drop-shadow-md`}>
-            {subtitle}
-          </motion.p>
-        )}
-      </motion.div>
-
-      {/* Buttons & Footer */}
-      <div className={`relative z-10 w-full flex flex-col ${isFirst ? 'items-start mt-8' : 'items-center px-6'}`}>
         <motion.div 
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ amount: 0.5, once: isFirst }}
-          className={`flex flex-col md:flex-row gap-4 md:gap-6 w-full ${isFirst ? 'max-w-md' : 'max-w-md md:max-w-2xl justify-center'}`}
+          viewport={{ amount: 0.5, once: isFirst, root: scrollContainerRef }}
+          className={`relative z-10 text-white ${isFirst ? 'text-left max-w-4xl' : 'text-center px-4 mx-auto'}`}
         >
-          {buttons.map((btn: any, i: number) => (
-            <motion.button 
-              key={i}
-              variants={itemVariants}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              transition={{ type: "spring", stiffness: 400, damping: 25 }}
-              className={`relative overflow-hidden group flex items-center justify-center gap-2 ${isFirst ? 'w-auto py-3 px-8' : 'w-full md:w-64 py-2.5 px-4'} rounded-sm text-[15px] font-medium tracking-wide backdrop-blur-sm transition-all duration-300 ${
-                btn.variant === 'red'
-                  ? 'bg-[#e63946] text-white hover:bg-[#d62828] shadow-[0_0_20px_rgba(230,57,70,0.3)]'
-                  : btn.primary 
-                    ? 'bg-[#f4f4f4] text-[#393c41] shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.25)] hover:bg-white' 
-                    : 'bg-[#171a20]/65 text-white border border-white/5 hover:border-white/20 hover:bg-[#171a20]/80'
-              }`}
-            >
-              <span className="relative z-10">{btn.text}</span>
-              {btn.icon === 'arrow-right' && <ArrowRight className="w-4 h-4 relative z-10" />}
-              {/* Shimmer effect for primary button */}
-              {btn.primary && (
-                <motion.div 
-                  className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/60 to-transparent z-0"
-                  animate={{ translateX: ['-100%', '200%'] }}
-                  transition={{ repeat: Infinity, duration: 2.5, ease: "linear", repeatDelay: 1.5 }}
-                />
-              )}
-            </motion.button>
-          ))}
+          <motion.h1 variants={itemVariants} className={`${isFirst ? 'text-5xl md:text-7xl lg:text-[80px] font-bold tracking-tight leading-tight' : 'text-4xl md:text-[44px] font-medium tracking-[0.1em]'} mb-3 drop-shadow-lg`}>
+            {title}
+          </motion.h1>
+          
+          {isFirst && (
+            <motion.div variants={itemVariants} className="w-16 h-1 bg-[#e63946] mb-6 mt-4" />
+          )}
+
+          {subtitle && (
+            <motion.p variants={itemVariants} className={`${isFirst ? 'text-lg md:text-2xl font-light tracking-wide' : 'text-[14px] md:text-[15px] font-normal tracking-wide'} text-white/90 drop-shadow-md`}>
+              {subtitle}
+            </motion.p>
+          )}
         </motion.div>
 
-        {isFirst && (
+        {/* Buttons & Footer */}
+        <div className={`relative z-10 w-full flex flex-col ${isFirst ? 'items-start mt-8' : 'items-center px-6 mt-10'}`}>
           <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1, y: [0, 8, 0] }}
-            transition={{ opacity: { delay: 2, duration: 1 }, y: { repeat: Infinity, duration: 2, ease: "easeInOut" } }}
-            className="absolute bottom-12 left-1/2 -translate-x-1/2 text-white/70"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ amount: 0.5, once: isFirst, root: scrollContainerRef }}
+            className={`flex flex-col md:flex-row gap-4 md:gap-6 w-full ${isFirst ? 'max-w-md' : 'max-w-md md:max-w-2xl justify-center'}`}
           >
-            <ChevronDown className="w-10 h-10" strokeWidth={1} />
+            {buttons.map((btn: any, i: number) => (
+              <motion.button 
+                key={i}
+                variants={itemVariants}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                className={`relative overflow-hidden group flex items-center justify-center gap-2 ${isFirst ? 'w-auto py-3 px-8' : 'w-full md:w-64 py-2.5 px-4'} rounded-sm text-[15px] font-medium tracking-wide backdrop-blur-sm transition-all duration-300 ${
+                  btn.variant === 'red'
+                    ? 'bg-[#e63946] text-white hover:bg-[#d62828] shadow-[0_0_20px_rgba(230,57,70,0.3)]'
+                    : btn.primary 
+                      ? 'bg-[#f4f4f4] text-[#393c41] shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.25)] hover:bg-white' 
+                      : 'bg-[#171a20]/65 text-white border border-white/5 hover:border-white/20 hover:bg-[#171a20]/80'
+                }`}
+              >
+                <span className="relative z-10">{btn.text}</span>
+                {btn.icon === 'arrow-right' && <ArrowRight className="w-4 h-4 relative z-10" />}
+                {/* Shimmer effect for primary button */}
+                {btn.primary && (
+                  <motion.div 
+                    className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/60 to-transparent z-0"
+                    animate={{ translateX: ['-100%', '200%'] }}
+                    transition={{ repeat: Infinity, duration: 2.5, ease: "linear", repeatDelay: 1.5 }}
+                  />
+                )}
+              </motion.button>
+            ))}
           </motion.div>
-        )}
-      </div>
+
+          {isFirst && (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1, y: [0, 8, 0] }}
+              transition={{ opacity: { delay: 2, duration: 1 }, y: { repeat: Infinity, duration: 2, ease: "easeInOut" } }}
+              className="absolute bottom-12 left-1/2 -translate-x-1/2 text-white/70"
+            >
+              <ChevronDown className="w-10 h-10" strokeWidth={1} />
+            </motion.div>
+          )}
+        </div>
+      </motion.div>
     </motion.section>
   );
 };
 
-const NewsSection = ({ index, setActiveSection }: { index: number, setActiveSection: (i: number) => void }) => {
+const NewsSection = ({ index, setActiveSection, scrollContainerRef }: { index: number, setActiveSection: (i: number) => void, scrollContainerRef: any }) => {
   const [selectedNews, setSelectedNews] = useState<number | null>(null);
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    container: scrollContainerRef,
+    offset: ["start end", "end start"]
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
+  const opacityContent = useTransform(smoothProgress, [0.2, 0.5, 0.8], [0, 1, 0]);
+  const yContent = useTransform(smoothProgress, [0, 1], ["20%", "-20%"]);
 
   const news = [
     {
@@ -294,11 +340,15 @@ const NewsSection = ({ index, setActiveSection }: { index: number, setActiveSect
 
   return (
     <motion.section
+      ref={ref}
       onViewportEnter={() => setActiveSection(index)}
-      viewport={{ amount: 0.5 }}
+      viewport={{ amount: 0.5, root: scrollContainerRef }}
       className="h-screen w-full snap-start snap-always relative flex flex-col items-center justify-center pt-[10vh] pb-12 overflow-hidden bg-[#0A1526]"
     >
-      <div className="w-full max-w-7xl px-8 z-10 flex-1 flex flex-col justify-center">
+      <motion.div 
+        style={{ opacity: opacityContent, y: yContent }}
+        className="w-full max-w-7xl px-8 z-10 flex-1 flex flex-col justify-center"
+      >
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-white/10 pb-3 mb-8 gap-4">
           <div className="flex items-end gap-8">
@@ -337,7 +387,7 @@ const NewsSection = ({ index, setActiveSection }: { index: number, setActiveSect
             </motion.div>
           ))}
         </div>
-      </div>
+      </motion.div>
 
       <motion.div
         initial={{ opacity: 0 }}
@@ -394,6 +444,7 @@ const NewsSection = ({ index, setActiveSection }: { index: number, setActiveSect
 export default function App() {
   const [activeSection, setActiveSection] = useState(0);
   const [activeModal, setActiveModal] = useState<string | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const sections = [
     {
@@ -403,59 +454,26 @@ export default function App() {
       buttons: [
         { text: "了解更多", variant: "red", icon: "arrow-right" }
       ]
-    },
-    {
-      title: "电子制造服务",
-      subtitle: "智能终端与边缘计算",
-      bgImage: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070&auto=format&fit=crop",
-      buttons: [
-        { text: "了解更多", primary: true },
-        { text: "联系销售", primary: false }
-      ]
-    },
-    {
-      title: "半导体工程",
-      subtitle: "核心计算与系统级封装",
-      bgImage: "https://images.unsplash.com/photo-1535223289827-42f1e9919769?q=80&w=2070&auto=format&fit=crop",
-      buttons: [
-        { text: "查看架构", primary: true },
-        { text: "立即订购", primary: false }
-      ]
-    },
-    {
-      title: "机械系统",
-      subtitle: "航天级公差与自动化",
-      bgImage: "https://images.unsplash.com/photo-1565043589221-1a6fd9ae45c7?q=80&w=2070&auto=format&fit=crop",
-      buttons: [
-        { text: "探索系统", primary: true }
-      ]
-    },
-    {
-      title: "威龙精密腕表",
-      subtitle: "工业钟表学的极致哲学",
-      bgImage: "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?q=80&w=2080&auto=format&fit=crop",
-      buttons: [
-        { text: "探索系列", primary: true },
-        { text: "精品店", primary: false }
-      ]
     }
   ];
 
   return (
-    <div className="h-screen w-full overflow-y-auto snap-y snap-mandatory no-scrollbar bg-black font-sans selection:bg-white selection:text-black">
+    <div ref={scrollRef} className="h-screen w-full overflow-y-auto snap-y snap-mandatory no-scrollbar bg-black font-sans selection:bg-white selection:text-black">
       <Navbar onAction={setActiveModal} activeSection={activeSection} />
-      <SideIndicator total={sections.length + 2} current={activeSection} />
+      <SideIndicator total={4} current={activeSection} />
       {sections.map((section, index) => (
         <Section 
           key={index}
           index={index}
           setActiveSection={setActiveSection}
+          scrollContainerRef={scrollRef}
           {...section}
           isFirst={index === 0}
         />
       ))}
-      <HQMap index={sections.length} setActiveSection={setActiveSection} />
-      <NewsSection index={sections.length + 1} setActiveSection={setActiveSection} />
+      <HorizontalShowcase index={1} setActiveSection={setActiveSection} scrollContainerRef={scrollRef} />
+      <HQMap index={2} setActiveSection={setActiveSection} scrollContainerRef={scrollRef} />
+      <NewsSection index={3} setActiveSection={setActiveSection} scrollContainerRef={scrollRef} />
 
       <AnimatePresence>
         {activeModal && (
