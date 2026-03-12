@@ -1,8 +1,12 @@
-<svg width="560" height="120" viewBox="0 0 560 120" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
-  <title id="title">Kellogg Precision Wordmark</title>
-  <desc id="desc">Kellogg Precision wordmark in deep navy.</desc>
-  <g fill="#071C3C" font-family="'Montserrat','Avenir Next','Segoe UI',sans-serif" dominant-baseline="middle">
-    <text x="8" y="44" font-size="76" font-weight="700" letter-spacing="2">KELLOGG</text>
-    <text x="10" y="102" font-size="62" font-weight="500" letter-spacing="6">PRECISION</text>
+<svg width="568" height="192" viewBox="0 0 568 192" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Kellogg Precision Logo</title>
+  <desc id="desc">Kellogg Precision two-line wordmark in deep blue.</desc>
+
+  <g fill="#051D45" font-family="'Montserrat','Avenir Next','Segoe UI',sans-serif">
+    <text x="10" y="86" font-size="106" font-weight="700" letter-spacing="1.5">KELLOGG</text>
+  </g>
+
+  <g fill="none" stroke="#051D45" stroke-width="2.4" font-family="'Montserrat','Avenir Next','Segoe UI',sans-serif">
+    <text x="11" y="168" font-size="72" font-weight="500" letter-spacing="5">PRECISION</text>
   </g>
 </svg>

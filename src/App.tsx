@@ -45,11 +45,11 @@ const JOBS = [
   }
 ];
 
-const Logo = ({ className = "", isLight = false }: { className?: string, isLight?: boolean }) => (
+const Logo = ({ className = "" }: { className?: string }) => (
   <img
     src={kelloggLogo}
     alt="Kellogg Precision"
-    className={`h-8 md:h-10 w-auto object-contain ${isLight ? 'brightness-0 invert' : ''} ${className}`}
+    className={`h-8 md:h-10 w-auto object-contain ${className}`}
     loading="eager"
     decoding="async"
   />
@@ -111,7 +111,7 @@ const Navbar = ({ onAction, activeSection }: { onAction: (action: string) => voi
       <div className="w-full flex items-center gap-2 md:gap-3">
         <button
           onClick={() => onAction('menu')}
-          className="h-11 px-3 rounded-xl bg-[#f3ef2a] text-[#0b1220] hover:bg-[#fff45a] transition-colors shadow-[0_8px_24px_rgba(243,239,42,0.25)] flex items-center"
+          className="h-11 px-3 rounded-xl bg-white/12 hover:bg-white/18 border border-white/10 backdrop-blur-xl transition-colors flex items-center"
           title="菜单"
         >
           <Logo className="h-6 md:h-7 w-auto" />
