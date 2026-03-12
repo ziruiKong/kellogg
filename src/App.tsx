@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'motion/react';
-import { ChevronDown, Globe, Headphones, Menu as MenuIcon, Briefcase, X, ArrowRight } from 'lucide-react';
+import { ChevronDown, X, ArrowRight } from 'lucide-react';
 import Lenis from 'lenis';
 import { HQMap } from './components/HQMap';
 import { HorizontalShowcase } from './components/HorizontalShowcase';
+import kelloggLogo from './assets/kellogg-logo.svg';
 
 const JOBS = [
   {
@@ -45,24 +46,13 @@ const JOBS = [
 ];
 
 const Logo = ({ className = "" }: { className?: string }) => (
-  <div className={`flex items-center gap-3 md:gap-4 ${className} text-white`}>
-    <svg viewBox="0 0 120 100" className="h-8 md:h-10 w-auto" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="silver-grad" x1="0%" y1="100%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#9ca3af" />
-          <stop offset="50%" stopColor="#e5e7eb" />
-          <stop offset="100%" stopColor="#ffffff" />
-        </linearGradient>
-      </defs>
-      <path d="M 10 15 H 30 V 65 L 10 85 Z" />
-      <path d="M 40 55 L 80 15 H 110 L 70 55 Z" fill="url(#silver-grad)" />
-      <path d="M 40 55 L 70 55 L 110 95 H 80 Z" />
-    </svg>
-    <div className="flex flex-col justify-center">
-      <span className="text-2xl md:text-3xl font-serif font-light tracking-[0.15em] leading-none uppercase">Kellogg</span>
-      <span className="text-[0.65rem] md:text-[0.75rem] font-normal tracking-[0.35em] leading-none uppercase text-white/70 mt-1.5">Precision</span>
-    </div>
-  </div>
+  <img
+    src={kelloggLogo}
+    alt="Kellogg Precision"
+    className={`h-8 md:h-10 w-auto object-contain ${className}`}
+    loading="eager"
+    decoding="async"
+  />
 );
 
 const CustomCursor = () => {
@@ -106,71 +96,43 @@ const CustomCursor = () => {
 };
 
 const Navbar = ({ onAction, activeSection }: { onAction: (action: string) => void, activeSection: number }) => {
-  const navLinks = ['电子制造', '半导体', '机械系统', '精密腕表'];
+  const navLinks = ['Expertise', 'Technology', 'Financing', 'Team', 'News'];
   const isScrolled = activeSection > 0;
 
   return (
-    <motion.nav 
+    <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-      className={`fixed top-0 w-full z-50 px-6 md:px-10 py-4 flex items-center justify-between transition-all duration-700 ${
-        isScrolled 
-          ? 'bg-transparent backdrop-blur-none border-transparent' 
-          : 'bg-black/60 backdrop-blur-xl border-b border-white/5'
+      className={`fixed top-0 w-full z-50 px-4 md:px-6 py-4 transition-all duration-700 ${
+        isScrolled ? 'bg-transparent' : 'bg-transparent'
       }`}
     >
-      <div className="flex-1 flex items-center">
-        <Logo className="scale-75 md:scale-90 origin-left" />
-      </div>
-      
-      <ul className="hidden lg:flex items-center justify-center gap-10 flex-1">
-        {navLinks.map((link, i) => (
-          <li 
-            key={i} 
-            className="cursor-pointer text-[12px] font-medium tracking-[0.2em] text-white/60 hover:text-white transition-colors duration-500 relative group py-2"
-          >
-            {link}
-            <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] bg-white/50 transition-all duration-500 group-hover:w-full" />
-          </li>
-        ))}
-      </ul>
-
-      <div className="flex-1 flex justify-end items-center gap-4 md:gap-6">
-        <button 
-          onClick={() => onAction('support')}
-          className="hidden md:flex items-center justify-center w-8 h-8 text-white/60 hover:text-white transition-colors duration-300"
-          title="技术支持"
-        >
-          <Headphones className="w-4 h-4" strokeWidth={1.5} />
-        </button>
-        
-        <button 
-          onClick={() => onAction('language')}
-          className="hidden md:flex items-center justify-center w-8 h-8 text-white/60 hover:text-white transition-colors duration-300"
-          title="语言选择"
-        >
-          <Globe className="w-4 h-4" strokeWidth={1.5} />
-        </button>
-
-        <button 
-          onClick={() => onAction('careers')}
-          className="hidden md:flex items-center gap-2 text-[12px] font-medium tracking-[0.15em] text-white/60 hover:text-white transition-colors duration-300 uppercase"
-        >
-          加入我们
-        </button>
-        
-        <div className="w-[1px] h-4 bg-white/20 hidden md:block mx-1" />
-
-        <button 
+      <div className="w-full flex items-center gap-2 md:gap-3">
+        <button
           onClick={() => onAction('menu')}
-          className="group flex items-center gap-3 text-[12px] font-medium tracking-[0.2em] text-white hover:text-white/70 transition-colors duration-500 uppercase"
+          className="h-11 px-3 rounded-xl bg-white/12 hover:bg-white/18 border border-white/10 backdrop-blur-xl transition-colors flex items-center"
+          title="菜单"
         >
-          <span className="hidden sm:inline">菜单</span>
-          <div className="flex flex-col gap-1.5 items-end">
-            <span className="w-6 h-[1px] bg-current transition-all duration-300 group-hover:w-4" />
-            <span className="w-4 h-[1px] bg-current transition-all duration-300 group-hover:w-6" />
-          </div>
+          <Logo className="h-6 md:h-7 w-auto" />
+        </button>
+
+        <div className="hidden lg:grid grid-cols-5 gap-2 flex-1">
+          {navLinks.map((link, i) => (
+            <button
+              key={i}
+              className="h-11 px-4 rounded-xl text-left text-sm text-slate-100/90 bg-white/12 hover:bg-white/18 border border-white/10 backdrop-blur-xl transition-colors"
+            >
+              {link}
+            </button>
+          ))}
+        </div>
+
+        <button
+          onClick={() => onAction('careers')}
+          className="h-11 px-5 md:px-7 rounded-xl bg-[#f3ef2a] text-[#0b1220] text-sm font-medium tracking-wide hover:bg-[#fff45a] transition-colors shadow-[0_8px_24px_rgba(243,239,42,0.25)] whitespace-nowrap"
+        >
+          Get in touch
         </button>
       </div>
     </motion.nav>
@@ -244,7 +206,7 @@ const Section = ({ title, subtitle, bgImage, buttons, isFirst, index, setActiveS
       className={`h-screen w-full relative flex flex-col ${isFirst ? 'items-start justify-center px-10 md:px-24' : 'items-center justify-between pt-[18vh] pb-12'} overflow-hidden`}
     >
       {/* Background with Cinematic Scale */}
-      <div className="absolute inset-0 z-0 overflow-hidden bg-black">
+      <div className="absolute inset-0 z-0 overflow-hidden bg-[#02050b]">
         <motion.img 
           style={{ y: yBg, scale: 1.2 }}
           initial={isFirst ? { scale: 1.2, opacity: 0.4 } : false}
@@ -254,32 +216,32 @@ const Section = ({ title, subtitle, bgImage, buttons, isFirst, index, setActiveS
           alt={title} 
           className="w-full h-full object-cover origin-center" 
         />
-        <div className="absolute inset-0 bg-black/20" />
-        <div className={`absolute inset-0 ${isFirst ? 'bg-gradient-to-r from-black/80 via-black/40 to-transparent' : 'bg-gradient-to-b from-black/60 via-transparent to-black/60'}`} />
+        <div className="absolute inset-0 bg-[#021126]/35" />
+        <div className={`absolute inset-0 ${isFirst ? 'bg-gradient-to-r from-[#02050b]/90 via-[#071a33]/55 to-transparent' : 'bg-gradient-to-b from-[#02050b]/80 via-[#0a1a34]/20 to-[#02050b]/80'}`} />
       </div>
 
       {/* Text Content */}
       <motion.div 
         style={{ opacity: contentOpacity, y: contentY }}
-        className="relative z-10 w-full flex flex-col h-full justify-center"
+        className={`relative z-10 w-full flex flex-col h-full ${isFirst ? "justify-end pb-20 md:pb-24" : "justify-center"}`}
       >
         <motion.div 
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ amount: 0.5, once: isFirst }}
-          className={`relative z-10 text-white ${isFirst ? 'text-left max-w-4xl' : 'text-center px-4 mx-auto'}`}
+          className={`relative z-10 text-slate-100 ${isFirst ? 'text-left max-w-5xl' : 'text-center px-4 mx-auto'}`}
         >
-          <motion.h1 variants={itemVariants} className={`${isFirst ? 'text-6xl md:text-8xl lg:text-[100px] font-serif font-light tracking-tight leading-[1.1]' : 'text-5xl md:text-[56px] font-serif font-light tracking-tight'} mb-4 drop-shadow-lg`}>
+          <motion.h1 variants={itemVariants} className={`${isFirst ? 'text-6xl md:text-8xl lg:text-[102px] font-sans font-light tracking-tight leading-[0.98]' : 'text-5xl md:text-[56px] font-serif font-light tracking-tight'} mb-4 drop-shadow-lg`}>
             {title}
           </motion.h1>
           
           {isFirst && (
-            <motion.div variants={itemVariants} className="w-12 h-[1px] bg-white/50 mb-8 mt-6" />
+            <motion.div variants={itemVariants} className="w-12 h-[1px] bg-slate-300/70 mb-8 mt-6" />
           )}
 
           {subtitle && (
-            <motion.p variants={itemVariants} className={`${isFirst ? 'text-xl md:text-3xl font-light tracking-wide text-white/80' : 'text-[15px] md:text-[17px] font-light tracking-wide text-white/70'} drop-shadow-md`}>
+            <motion.p variants={itemVariants} className={`${isFirst ? 'text-lg md:text-[34px] font-light tracking-tight text-slate-200/90 max-w-2xl leading-[1.25]' : 'text-[15px] md:text-[17px] font-light tracking-wide text-slate-300/85'} drop-shadow-md`}>
               {subtitle}
             </motion.p>
           )}
@@ -302,11 +264,13 @@ const Section = ({ title, subtitle, bgImage, buttons, isFirst, index, setActiveS
                 whileTap={{ scale: 0.97 }}
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
                 className={`relative overflow-hidden group flex items-center justify-center gap-2 ${isFirst ? 'w-auto py-3 px-8' : 'w-full md:w-64 py-2.5 px-4'} rounded-full text-[14px] font-medium tracking-[0.1em] uppercase backdrop-blur-sm transition-all duration-300 ${
-                  btn.variant === 'red'
-                    ? 'bg-white text-black hover:bg-gray-200'
+                  btn.variant === 'accent'
+                    ? 'bg-[#f3ef2a] text-[#0b1220] hover:bg-[#fff45a]'
+                    : btn.variant === 'red'
+                      ? 'bg-slate-200 text-[#0a1730] hover:bg-white'
                     : btn.primary 
-                      ? 'bg-transparent text-white border border-white/30 hover:bg-white hover:text-black' 
-                      : 'bg-transparent text-white border border-white/10 hover:border-white/40 hover:bg-white/5'
+                      ? 'bg-transparent text-slate-100 border border-slate-200/40 hover:bg-slate-200 hover:text-[#0a1730]' 
+                      : 'bg-transparent text-slate-200 border border-slate-200/20 hover:border-slate-200/45 hover:bg-slate-200/10'
                 }`}
               >
                 <span className="relative z-10">{btn.text}</span>
@@ -314,7 +278,7 @@ const Section = ({ title, subtitle, bgImage, buttons, isFirst, index, setActiveS
                 {/* Shimmer effect for primary button */}
                 {btn.primary && (
                   <motion.div 
-                    className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/60 to-transparent z-0"
+                    className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-slate-200/70 to-transparent z-0"
                     animate={{ translateX: ['-100%', '200%'] }}
                     transition={{ repeat: Infinity, duration: 2.5, ease: "linear", repeatDelay: 1.5 }}
                   />
@@ -328,7 +292,7 @@ const Section = ({ title, subtitle, bgImage, buttons, isFirst, index, setActiveS
               initial={{ opacity: 0 }}
               animate={{ opacity: 1, y: [0, 8, 0] }}
               transition={{ opacity: { delay: 2, duration: 1 }, y: { repeat: Infinity, duration: 2, ease: "easeInOut" } }}
-              className="absolute bottom-12 left-1/2 -translate-x-1/2 text-white/70"
+              className="absolute bottom-12 left-1/2 -translate-x-1/2 text-slate-300/85"
             >
               <ChevronDown className="w-10 h-10" strokeWidth={1} />
             </motion.div>
@@ -382,22 +346,22 @@ const NewsSection = ({ index, setActiveSection }: { index: number, setActiveSect
       ref={ref}
       onViewportEnter={() => setActiveSection(index)}
       viewport={{ amount: 0.5 }}
-      className="min-h-screen w-full relative flex flex-col items-center justify-center pt-[10vh] pb-12 overflow-hidden bg-black"
+      className="min-h-screen w-full relative flex flex-col items-center justify-center pt-[10vh] pb-12 overflow-hidden bg-[#02050b]"
     >
       <motion.div 
         style={{ opacity: opacityContent, y: yContent }}
         className="w-full max-w-7xl px-8 z-10 flex-1 flex flex-col justify-center"
       >
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-white/10 pb-3 mb-8 gap-4">
+        <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-slate-300/20 pb-3 mb-8 gap-4">
           <div className="flex items-end gap-8">
-            <h2 className="text-4xl md:text-5xl font-serif font-light text-white tracking-tight">最新消息</h2>
+            <h2 className="text-4xl md:text-5xl font-serif font-light text-slate-100 tracking-tight">最新消息</h2>
             <div className="flex gap-2 text-sm font-medium mb-1">
-              <button className="bg-white/10 text-white px-6 py-1.5 rounded-full hover:bg-white/20 transition-colors">新闻</button>
-              <button className="text-white/60 hover:text-white px-6 py-1.5 transition-colors">活动</button>
+              <button className="bg-slate-200/20 text-slate-100 px-6 py-1.5 rounded-full hover:bg-slate-300/30 transition-colors">新闻</button>
+              <button className="text-slate-300 hover:text-slate-100 px-6 py-1.5 transition-colors">活动</button>
             </div>
           </div>
-          <a href="#" className="text-white/60 hover:text-white text-sm flex items-center gap-1 transition-colors mb-2">
+          <a href="#" className="text-slate-300 hover:text-slate-100 text-sm flex items-center gap-1 transition-colors mb-2">
             更多新闻 <ArrowRight className="w-4 h-4" />
           </a>
         </div>
@@ -414,13 +378,13 @@ const NewsSection = ({ index, setActiveSection }: { index: number, setActiveSect
               viewport={{ amount: 0.5 }}
               className="group cursor-pointer flex flex-col"
             >
-              <div className="overflow-hidden relative aspect-[16/9] mb-4 bg-white/5">
+              <div className="overflow-hidden relative aspect-[16/9] mb-4 bg-slate-200/10">
                 <img src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
               </div>
-              <h3 className="text-white font-medium text-lg leading-snug group-hover:text-white/80 transition-colors line-clamp-2 mb-3">
+              <h3 className="text-slate-100 font-medium text-lg leading-snug group-hover:text-slate-200/90 transition-colors line-clamp-2 mb-3">
                 {item.title}
               </h3>
-              <p className="text-white/50 text-sm mt-auto">
+              <p className="text-slate-300/70 text-sm mt-auto">
                 {item.date}
               </p>
             </motion.div>
@@ -434,12 +398,12 @@ const NewsSection = ({ index, setActiveSection }: { index: number, setActiveSect
         transition={{ delay: 0.6, duration: 1 }}
         className="absolute bottom-8 w-full flex flex-wrap justify-center gap-4 md:gap-8 text-[12px] text-gray-400 font-medium tracking-wide z-10"
       >
-        <a href="#" className="hover:text-white transition-colors">凯洛格精密 © 2026</a>
-        <a href="#" className="hover:text-white transition-colors">隐私与法律</a>
-        <a href="#" className="hover:text-white transition-colors">联系我们</a>
-        <a href="#" className="hover:text-white transition-colors">新闻资讯</a>
-        <a href="#" className="hover:text-white transition-colors">获取更新</a>
-        <a href="#" className="hover:text-white transition-colors">办公地点</a>
+        <a href="#" className="hover:text-slate-200 transition-colors">凯洛格精密 © 2026</a>
+        <a href="#" className="hover:text-slate-200 transition-colors">隐私与法律</a>
+        <a href="#" className="hover:text-slate-200 transition-colors">联系我们</a>
+        <a href="#" className="hover:text-slate-200 transition-colors">新闻资讯</a>
+        <a href="#" className="hover:text-slate-200 transition-colors">获取更新</a>
+        <a href="#" className="hover:text-slate-200 transition-colors">办公地点</a>
       </motion.div>
 
       <AnimatePresence>
@@ -450,25 +414,25 @@ const NewsSection = ({ index, setActiveSection }: { index: number, setActiveSect
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setSelectedNews(null)}
-              className="absolute inset-0 bg-black/80 backdrop-blur-md"
+              className="absolute inset-0 bg-[#02050b]/85 backdrop-blur-md"
             />
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-3xl bg-[#0a0a0a] border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]"
+              className="relative w-full max-w-3xl bg-[#040c1a] border border-slate-300/20 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]"
             >
-              <button onClick={() => setSelectedNews(null)} className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-black/80 transition-all">
+              <button onClick={() => setSelectedNews(null)} className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-[#02050b]/65 backdrop-blur-sm border border-slate-300/20 flex items-center justify-center text-slate-300/85 hover:text-slate-100 hover:bg-[#02050b]/90 transition-all">
                 <X className="w-5 h-5" strokeWidth={1.5} />
               </button>
               <div className="w-full h-64 md:h-80 relative flex-shrink-0">
                 <img src={news[selectedNews].image} alt={news[selectedNews].title} className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/50 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#040c1a] via-[#040c1a]/60 to-transparent" />
               </div>
               <div className="p-8 md:p-10 overflow-y-auto no-scrollbar -mt-32 relative z-10">
-                <span className="text-white/60 text-sm font-medium mb-3 block">{news[selectedNews].date}</span>
-                <h2 className="text-3xl md:text-4xl font-serif font-light text-white leading-snug mb-6">{news[selectedNews].title}</h2>
-                <div className="text-white/80 leading-relaxed space-y-4 text-base md:text-lg font-light">
+                <span className="text-slate-300/85 text-sm font-medium mb-3 block">{news[selectedNews].date}</span>
+                <h2 className="text-3xl md:text-4xl font-serif font-light text-slate-100 leading-snug mb-6">{news[selectedNews].title}</h2>
+                <div className="text-slate-200/90 leading-relaxed space-y-4 text-base md:text-lg font-light">
                   <p>{news[selectedNews].content}</p>
                 </div>
               </div>
@@ -495,31 +459,41 @@ export default function App() {
       touchMultiplier: 2,
     });
 
+    let rafId = 0;
+
     function raf(time: number) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      rafId = requestAnimationFrame(raf);
     }
 
-    requestAnimationFrame(raf);
+    rafId = requestAnimationFrame(raf);
 
     return () => {
+      cancelAnimationFrame(rafId);
       lenis.destroy();
     };
   }, []);
 
   const sections = [
     {
-      title: "携手共创美好未来",
-      subtitle: "",
-      bgImage: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop",
+      title: "Technology",
+      subtitle: "Kellogg Precision integrates advanced power electronics, intelligent control systems, and manufacturing software into one resilient technology stack.",
+      bgImage: "https://images.unsplash.com/photo-1562408590-e32931084e23?q=80&w=2070&auto=format&fit=crop",
       buttons: [
-        { text: "了解更多", variant: "red", icon: "arrow-right" }
+        { text: "Explore Technology", variant: "accent", icon: "arrow-right" },
+        { text: "Get in Touch", primary: true }
       ]
     }
   ];
 
   return (
-    <div className="min-h-screen w-full bg-black font-sans selection:bg-white selection:text-black cursor-none">
+    <div className="relative min-h-screen w-full bg-[#02050b] font-sans selection:bg-slate-200 selection:text-[#0a1730] cursor-none overflow-x-hidden">
+      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+        <div className="absolute -top-36 -left-24 w-[34rem] h-[34rem] rounded-full bg-[#0b2a56]/35 blur-[130px] app-orb" />
+        <div className="absolute top-[28%] -right-36 w-[36rem] h-[36rem] rounded-full bg-slate-200/10 blur-[140px] app-orb app-orb--slow" />
+        <div className="absolute inset-0 app-grid" />
+        <div className="absolute inset-0 app-noise" />
+      </div>
       <CustomCursor />
       <Navbar onAction={setActiveModal} activeSection={activeSection} />
       <SideIndicator total={4} current={activeSection} />
@@ -544,7 +518,7 @@ export default function App() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setActiveModal(null)}
-              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              className="absolute inset-0 bg-[#02050b]/70 backdrop-blur-sm"
             />
             
             {activeModal === 'menu' && (
@@ -553,17 +527,17 @@ export default function App() {
                 animate={{ x: 0 }}
                 exit={{ x: '100%' }}
                 transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                className="absolute right-0 top-0 bottom-0 w-full md:w-[400px] bg-[#0a0a0a] border-l border-white/10 p-8 flex flex-col"
+                className="absolute right-0 top-0 bottom-0 w-full md:w-[400px] bg-[#040c1a] border-l border-slate-300/20 p-8 flex flex-col"
               >
                 <div className="flex justify-end">
-                  <button onClick={() => setActiveModal(null)} className="text-white/70 hover:text-white transition-colors">
+                  <button onClick={() => setActiveModal(null)} className="text-slate-300/85 hover:text-slate-200 transition-colors">
                     <X className="w-6 h-6" strokeWidth={1.5} />
                   </button>
                 </div>
-                <div className="mt-12 flex flex-col gap-6 text-white">
+                <div className="mt-12 flex flex-col gap-6 text-slate-100">
                   <h2 className="text-3xl font-serif font-light tracking-tight mb-4">导航</h2>
                   {['电子制造', '半导体', '机械系统', '精密腕表', '投资者关系', '新闻资讯', '招贤纳士'].map(item => (
-                    <a key={item} href="#" className="text-xl font-light hover:text-white/70 transition-colors">{item}</a>
+                    <a key={item} href="#" className="text-xl font-light hover:text-slate-300/85 transition-colors">{item}</a>
                   ))}
                 </div>
               </motion.div>
@@ -575,14 +549,14 @@ export default function App() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 40 }}
                 transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                className="relative w-full max-w-6xl h-[85vh] bg-[#0a0a0a]/90 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-2xl text-white mx-4 flex flex-col overflow-hidden"
+                className="relative w-full max-w-6xl h-[85vh] bg-[#040c1a]/90 backdrop-blur-2xl border border-slate-300/20 rounded-3xl shadow-2xl text-slate-100 mx-4 flex flex-col overflow-hidden"
               >
-                <div className="flex-none p-8 md:px-12 md:py-10 border-b border-white/10 flex justify-between items-center bg-white/[0.02]">
+                <div className="flex-none p-8 md:px-12 md:py-10 border-b border-slate-300/20 flex justify-between items-center bg-slate-200/[0.04]">
                   <div>
                     <h2 className="text-4xl md:text-5xl font-serif font-light tracking-tight mb-2">加入凯洛格精密</h2>
-                    <p className="text-white/60 text-base md:text-lg font-light tracking-wide">与我们共同塑造制造与工程的未来。</p>
+                    <p className="text-slate-300 text-base md:text-lg font-light tracking-wide">与我们共同塑造制造与工程的未来。</p>
                   </div>
-                  <button onClick={() => setActiveModal(null)} className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-all">
+                  <button onClick={() => setActiveModal(null)} className="w-10 h-10 rounded-full bg-slate-200/10 border border-slate-300/20 flex items-center justify-center text-slate-300/85 hover:text-slate-100 hover:bg-slate-200/20 transition-all">
                     <X className="w-5 h-5" strokeWidth={1.5} />
                   </button>
                 </div>
@@ -606,7 +580,7 @@ export default function App() {
                           hover: { y: -5, scale: 1.02, transition: { type: "spring", damping: 20 } }
                         }}
                         whileHover="hover"
-                        className="group relative p-8 rounded-2xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.08] transition-colors duration-300 overflow-hidden flex flex-col cursor-pointer"
+                        className="group relative p-8 rounded-2xl border border-slate-300/20 bg-slate-200/[0.05] hover:bg-slate-200/[0.12] transition-colors duration-300 overflow-hidden flex flex-col cursor-pointer"
                       >
                         <motion.div 
                           variants={{
@@ -614,31 +588,31 @@ export default function App() {
                             visible: { x: '-100%' },
                             hover: { x: '200%', transition: { repeat: Infinity, duration: 1.5, ease: "linear" } }
                           }}
-                          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent z-0 pointer-events-none"
+                          className="absolute inset-0 bg-gradient-to-r from-transparent via-slate-200/20 to-transparent z-0 pointer-events-none"
                         />
                         
                         <div className="relative z-10 mb-6">
                           <div className="flex justify-between items-start mb-4">
-                            <span className="text-[11px] uppercase tracking-widest text-white/50 font-medium px-2 py-1 rounded border border-white/10 bg-white/5">{job.dept}</span>
-                            <span className="text-[12px] text-white/40">{job.location}</span>
+                            <span className="text-[11px] uppercase tracking-widest text-slate-300/70 font-medium px-2 py-1 rounded border border-slate-300/20 bg-slate-200/10">{job.dept}</span>
+                            <span className="text-[12px] text-slate-300/60">{job.location}</span>
                           </div>
-                          <h3 className="text-xl font-medium tracking-wide mb-2 group-hover:text-white transition-colors">{job.title}</h3>
+                          <h3 className="text-xl font-medium tracking-wide mb-2 group-hover:text-slate-200 transition-colors">{job.title}</h3>
                         </div>
                         
                         <div className="relative z-10 flex-1 mb-8">
                           <ul className="space-y-2">
                             {job.reqs.map((req, rIdx) => (
-                              <li key={rIdx} className="text-[13px] text-white/60 flex items-start gap-2">
-                                <span className="w-1 h-1 rounded-full bg-white/30 mt-1.5 flex-shrink-0" />
+                              <li key={rIdx} className="text-[13px] text-slate-300/85 flex items-start gap-2">
+                                <span className="w-1 h-1 rounded-full bg-slate-300/45 mt-1.5 flex-shrink-0" />
                                 <span>{req}</span>
                               </li>
                             ))}
                           </ul>
                         </div>
 
-                        <div className="relative z-10 mt-auto pt-4 border-t border-white/10 flex items-center justify-between">
-                          <span className="text-[13px] font-medium tracking-wide text-white/40 group-hover:text-white transition-colors">全职</span>
-                          <span className="text-[13px] font-medium tracking-wide text-white opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+                        <div className="relative z-10 mt-auto pt-4 border-t border-slate-300/20 flex items-center justify-between">
+                          <span className="text-[13px] font-medium tracking-wide text-slate-300/60 group-hover:text-slate-200 transition-colors">全职</span>
+                          <span className="text-[13px] font-medium tracking-wide text-slate-100 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
                             立即申请 <ArrowRight className="w-4 h-4" />
                           </span>
                         </div>
@@ -654,21 +628,21 @@ export default function App() {
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                className="relative w-full max-w-md bg-[#0a0a0a]/90 backdrop-blur-xl border border-white/10 p-8 rounded-2xl shadow-2xl text-white mx-4"
+                className="relative w-full max-w-md bg-[#040c1a]/90 backdrop-blur-xl border border-slate-300/20 p-8 rounded-2xl shadow-2xl text-slate-100 mx-4"
               >
-                <button onClick={() => setActiveModal(null)} className="absolute top-6 right-6 text-white/70 hover:text-white transition-colors">
+                <button onClick={() => setActiveModal(null)} className="absolute top-6 right-6 text-slate-300/85 hover:text-slate-200 transition-colors">
                   <X className="w-5 h-5" strokeWidth={1.5} />
                 </button>
                 <h2 className="text-2xl font-medium tracking-wider mb-2 capitalize">
                   {activeModal === 'support' ? '技术支持' : '语言选择'}
                 </h2>
-                <p className="text-white/60 text-sm leading-relaxed mb-8">
+                <p className="text-slate-300 text-sm leading-relaxed mb-8">
                   {activeModal === 'support' && "我们的精密工程支持团队全天候为您提供技术咨询与协助。"}
                   {activeModal === 'language' && "选择您偏好的地区和语言，定制您的专属体验。"}
                 </p>
                 <button 
                   onClick={() => setActiveModal(null)}
-                  className="w-full py-3 bg-white text-black font-medium rounded text-sm hover:bg-white/90 transition-colors"
+                  className="w-full py-3 bg-slate-200 text-[#0a1730] font-medium rounded text-sm hover:bg-white transition-colors"
                 >
                   {activeModal === 'language' ? '确认' : '探索'}
                 </button>
