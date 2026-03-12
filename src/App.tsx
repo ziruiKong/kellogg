@@ -106,8 +106,8 @@ const Navbar = ({ onAction, activeSection }: { onAction: (action: string) => voi
       transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
       className={`fixed top-0 w-full z-50 px-6 md:px-10 py-4 flex items-center justify-between transition-all duration-700 ${
         isScrolled 
-          ? 'bg-transparent backdrop-blur-none border-transparent' 
-          : 'bg-[#050a14]/80 backdrop-blur-xl border-b border-slate-200/10'
+          ? 'bg-white/95 backdrop-blur-xl border-b border-slate-300/50 shadow-[0_4px_18px_rgba(2,5,11,0.08)]' 
+          : 'bg-white/90 backdrop-blur-xl border-b border-slate-300/40 shadow-[0_4px_18px_rgba(2,5,11,0.08)]'
       }`}
     >
       <div className="flex-1 flex items-center">
@@ -118,10 +118,10 @@ const Navbar = ({ onAction, activeSection }: { onAction: (action: string) => voi
         {navLinks.map((link, i) => (
           <li 
             key={i} 
-            className="cursor-pointer text-[12px] font-medium tracking-[0.2em] text-slate-300 hover:text-slate-200 transition-colors duration-500 relative group py-2"
+            className="cursor-pointer text-[12px] font-medium tracking-[0.2em] text-slate-700 hover:text-[#0a1730] transition-colors duration-500 relative group py-2"
           >
             {link}
-            <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] bg-slate-300/70 transition-all duration-500 group-hover:w-full" />
+            <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] bg-slate-500/60 transition-all duration-500 group-hover:w-full" />
           </li>
         ))}
       </ul>
@@ -129,7 +129,7 @@ const Navbar = ({ onAction, activeSection }: { onAction: (action: string) => voi
       <div className="flex-1 flex justify-end items-center gap-4 md:gap-6">
         <button 
           onClick={() => onAction('support')}
-          className="hidden md:flex items-center justify-center w-8 h-8 text-slate-300 hover:text-slate-200 transition-colors duration-300"
+          className="hidden md:flex items-center justify-center w-8 h-8 text-slate-700 hover:text-[#0a1730] transition-colors duration-300"
           title="技术支持"
         >
           <Headphones className="w-4 h-4" strokeWidth={1.5} />
@@ -137,7 +137,7 @@ const Navbar = ({ onAction, activeSection }: { onAction: (action: string) => voi
         
         <button 
           onClick={() => onAction('language')}
-          className="hidden md:flex items-center justify-center w-8 h-8 text-slate-300 hover:text-slate-200 transition-colors duration-300"
+          className="hidden md:flex items-center justify-center w-8 h-8 text-slate-700 hover:text-[#0a1730] transition-colors duration-300"
           title="语言选择"
         >
           <Globe className="w-4 h-4" strokeWidth={1.5} />
@@ -145,16 +145,16 @@ const Navbar = ({ onAction, activeSection }: { onAction: (action: string) => voi
 
         <button 
           onClick={() => onAction('careers')}
-          className="hidden md:flex items-center gap-2 text-[12px] font-medium tracking-[0.15em] text-slate-300 hover:text-slate-200 transition-colors duration-300 uppercase"
+          className="hidden md:flex items-center gap-2 text-[12px] font-medium tracking-[0.15em] text-slate-700 hover:text-[#0a1730] transition-colors duration-300 uppercase"
         >
           加入我们
         </button>
         
-        <div className="w-[1px] h-4 bg-slate-300/30 hidden md:block mx-1" />
+        <div className="w-[1px] h-4 bg-slate-400/45 hidden md:block mx-1" />
 
         <button 
           onClick={() => onAction('menu')}
-          className="group flex items-center gap-3 text-[12px] font-medium tracking-[0.2em] text-slate-100 hover:text-slate-300 transition-colors duration-500 uppercase"
+          className="group flex items-center gap-3 text-[12px] font-medium tracking-[0.2em] text-slate-800 hover:text-[#0a1730] transition-colors duration-500 uppercase"
         >
           <span className="hidden sm:inline">菜单</span>
           <div className="flex flex-col gap-1.5 items-end">
