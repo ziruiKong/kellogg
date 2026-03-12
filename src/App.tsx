@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'motion/react';
-import { ChevronDown, Globe, Headphones, Menu as MenuIcon, Briefcase, X, ArrowRight } from 'lucide-react';
+import { ChevronDown, X, ArrowRight } from 'lucide-react';
 import Lenis from 'lenis';
 import { HQMap } from './components/HQMap';
 import { HorizontalShowcase } from './components/HorizontalShowcase';
@@ -96,74 +96,43 @@ const CustomCursor = () => {
 };
 
 const Navbar = ({ onAction, activeSection }: { onAction: (action: string) => void, activeSection: number }) => {
-  const navLinks = ['电子制造', '半导体', '机械系统', '精密腕表'];
+  const navLinks = ['Expertise', 'Technology', 'Financing', 'Team', 'News'];
   const isScrolled = activeSection > 0;
-  const textTone = isScrolled ? 'text-slate-100 hover:text-white' : 'text-slate-700 hover:text-[#0a1730]';
-  const underlineTone = isScrolled ? 'bg-white/70' : 'bg-slate-500/60';
-  const dividerTone = isScrolled ? 'bg-white/40' : 'bg-slate-400/45';
 
   return (
-    <motion.nav 
+    <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-      className={`fixed top-0 w-full z-50 px-6 md:px-10 py-4 flex items-center justify-between transition-all duration-700 ${
-        isScrolled
-          ? 'bg-transparent backdrop-blur-none border-transparent shadow-none'
-          : 'bg-white/90 backdrop-blur-xl border-b border-slate-300/40 shadow-[0_4px_18px_rgba(2,5,11,0.08)]'
+      className={`fixed top-0 w-full z-50 px-4 md:px-6 py-4 transition-all duration-700 ${
+        isScrolled ? 'bg-transparent' : 'bg-transparent'
       }`}
     >
-      <div className="flex-1 flex items-center">
-        <Logo isLight={isScrolled} className="scale-75 md:scale-90 origin-left" />
-      </div>
-      
-      <ul className="hidden lg:flex items-center justify-center gap-10 flex-1">
-        {navLinks.map((link, i) => (
-          <li 
-            key={i} 
-            className={`cursor-pointer text-[12px] font-medium tracking-[0.2em] transition-colors duration-500 relative group py-2 ${textTone}`}
-          >
-            {link}
-            <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] transition-all duration-500 group-hover:w-full ${underlineTone}`} />
-          </li>
-        ))}
-      </ul>
-
-      <div className="flex-1 flex justify-end items-center gap-4 md:gap-6">
-        <button 
-          onClick={() => onAction('support')}
-          className={`hidden md:flex items-center justify-center w-8 h-8 transition-colors duration-300 ${textTone}`}
-          title="技术支持"
-        >
-          <Headphones className="w-4 h-4" strokeWidth={1.5} />
-        </button>
-        
-        <button 
-          onClick={() => onAction('language')}
-          className={`hidden md:flex items-center justify-center w-8 h-8 transition-colors duration-300 ${textTone}`}
-          title="语言选择"
-        >
-          <Globe className="w-4 h-4" strokeWidth={1.5} />
-        </button>
-
-        <button 
-          onClick={() => onAction('careers')}
-          className={`hidden md:flex items-center gap-2 text-[12px] font-medium tracking-[0.15em] transition-colors duration-300 uppercase ${textTone}`}
-        >
-          加入我们
-        </button>
-        
-        <div className={`w-[1px] h-4 hidden md:block mx-1 ${dividerTone}`} />
-
-        <button 
+      <div className="w-full flex items-center gap-2 md:gap-3">
+        <button
           onClick={() => onAction('menu')}
-          className={`group flex items-center gap-3 text-[12px] font-medium tracking-[0.2em] transition-colors duration-500 uppercase ${textTone}`}
+          className="h-11 px-3 rounded-xl bg-[#f3ef2a] text-[#0b1220] hover:bg-[#fff45a] transition-colors shadow-[0_8px_24px_rgba(243,239,42,0.25)] flex items-center"
+          title="菜单"
         >
-          <span className="hidden sm:inline">菜单</span>
-          <div className="flex flex-col gap-1.5 items-end">
-            <span className="w-6 h-[1px] bg-current transition-all duration-300 group-hover:w-4" />
-            <span className="w-4 h-[1px] bg-current transition-all duration-300 group-hover:w-6" />
-          </div>
+          <Logo className="h-6 md:h-7 w-auto" />
+        </button>
+
+        <div className="hidden lg:grid grid-cols-5 gap-2 flex-1">
+          {navLinks.map((link, i) => (
+            <button
+              key={i}
+              className="h-11 px-4 rounded-xl text-left text-sm text-slate-100/90 bg-white/12 hover:bg-white/18 border border-white/10 backdrop-blur-xl transition-colors"
+            >
+              {link}
+            </button>
+          ))}
+        </div>
+
+        <button
+          onClick={() => onAction('careers')}
+          className="h-11 px-5 md:px-7 rounded-xl bg-[#f3ef2a] text-[#0b1220] text-sm font-medium tracking-wide hover:bg-[#fff45a] transition-colors shadow-[0_8px_24px_rgba(243,239,42,0.25)] whitespace-nowrap"
+        >
+          Get in touch
         </button>
       </div>
     </motion.nav>
@@ -254,16 +223,16 @@ const Section = ({ title, subtitle, bgImage, buttons, isFirst, index, setActiveS
       {/* Text Content */}
       <motion.div 
         style={{ opacity: contentOpacity, y: contentY }}
-        className="relative z-10 w-full flex flex-col h-full justify-center"
+        className={`relative z-10 w-full flex flex-col h-full ${isFirst ? "justify-end pb-20 md:pb-24" : "justify-center"}`}
       >
         <motion.div 
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ amount: 0.5, once: isFirst }}
-          className={`relative z-10 text-slate-100 ${isFirst ? 'text-left max-w-4xl' : 'text-center px-4 mx-auto'}`}
+          className={`relative z-10 text-slate-100 ${isFirst ? 'text-left max-w-5xl' : 'text-center px-4 mx-auto'}`}
         >
-          <motion.h1 variants={itemVariants} className={`${isFirst ? 'text-6xl md:text-8xl lg:text-[100px] font-serif font-light tracking-tight leading-[1.1]' : 'text-5xl md:text-[56px] font-serif font-light tracking-tight'} mb-4 drop-shadow-lg`}>
+          <motion.h1 variants={itemVariants} className={`${isFirst ? 'text-6xl md:text-8xl lg:text-[102px] font-sans font-light tracking-tight leading-[0.98]' : 'text-5xl md:text-[56px] font-serif font-light tracking-tight'} mb-4 drop-shadow-lg`}>
             {title}
           </motion.h1>
           
@@ -272,7 +241,7 @@ const Section = ({ title, subtitle, bgImage, buttons, isFirst, index, setActiveS
           )}
 
           {subtitle && (
-            <motion.p variants={itemVariants} className={`${isFirst ? 'text-xl md:text-3xl font-light tracking-wide text-slate-200/90' : 'text-[15px] md:text-[17px] font-light tracking-wide text-slate-300/85'} drop-shadow-md`}>
+            <motion.p variants={itemVariants} className={`${isFirst ? 'text-lg md:text-[34px] font-light tracking-tight text-slate-200/90 max-w-2xl leading-[1.25]' : 'text-[15px] md:text-[17px] font-light tracking-wide text-slate-300/85'} drop-shadow-md`}>
               {subtitle}
             </motion.p>
           )}
@@ -295,8 +264,10 @@ const Section = ({ title, subtitle, bgImage, buttons, isFirst, index, setActiveS
                 whileTap={{ scale: 0.97 }}
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
                 className={`relative overflow-hidden group flex items-center justify-center gap-2 ${isFirst ? 'w-auto py-3 px-8' : 'w-full md:w-64 py-2.5 px-4'} rounded-full text-[14px] font-medium tracking-[0.1em] uppercase backdrop-blur-sm transition-all duration-300 ${
-                  btn.variant === 'red'
-                    ? 'bg-slate-200 text-[#0a1730] hover:bg-white'
+                  btn.variant === 'accent'
+                    ? 'bg-[#f3ef2a] text-[#0b1220] hover:bg-[#fff45a]'
+                    : btn.variant === 'red'
+                      ? 'bg-slate-200 text-[#0a1730] hover:bg-white'
                     : btn.primary 
                       ? 'bg-transparent text-slate-100 border border-slate-200/40 hover:bg-slate-200 hover:text-[#0a1730]' 
                       : 'bg-transparent text-slate-200 border border-slate-200/20 hover:border-slate-200/45 hover:bg-slate-200/10'
@@ -505,11 +476,12 @@ export default function App() {
 
   const sections = [
     {
-      title: "携手共创美好未来",
-      subtitle: "",
-      bgImage: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop",
+      title: "Technology",
+      subtitle: "Kellogg Precision integrates advanced power electronics, intelligent control systems, and manufacturing software into one resilient technology stack.",
+      bgImage: "https://images.unsplash.com/photo-1562408590-e32931084e23?q=80&w=2070&auto=format&fit=crop",
       buttons: [
-        { text: "了解更多", variant: "red", icon: "arrow-right" }
+        { text: "Explore Technology", variant: "accent", icon: "arrow-right" },
+        { text: "Get in Touch", primary: true }
       ]
     }
   ];
