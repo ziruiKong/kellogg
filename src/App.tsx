@@ -96,7 +96,7 @@ const CustomCursor = () => {
 };
 
 const Navbar = ({ onAction, activeSection }: { onAction: (action: string) => void, activeSection: number }) => {
-  const navLinks = ['Expertise', 'Technology', 'Financing', 'Team', 'News'];
+  const navLinks = ['业务 Expertise', '科技 Tech', '金融 Finance', '团队 Team', '新闻 News'];
   const isScrolled = activeSection > 0;
 
   return (
@@ -111,17 +111,17 @@ const Navbar = ({ onAction, activeSection }: { onAction: (action: string) => voi
       <div className="w-full flex items-center gap-2 md:gap-3">
         <button
           onClick={() => onAction('menu')}
-          className="h-11 px-3 rounded-xl bg-white/12 hover:bg-white/18 border border-white/10 backdrop-blur-xl transition-colors flex items-center"
+          className="h-9 px-2.5 rounded-lg bg-[#f3ef2a] hover:bg-[#fff45a] text-[#0b1220] transition-colors shadow-[0_6px_18px_rgba(243,239,42,0.28)] flex items-center"
           title="菜单"
         >
-          <Logo className="h-6 md:h-7 w-auto" />
+          <Logo className="h-4 md:h-5 w-auto" />
         </button>
 
         <div className="hidden lg:grid grid-cols-5 gap-2 flex-1">
           {navLinks.map((link, i) => (
             <button
               key={i}
-              className="h-11 px-4 rounded-xl text-left text-sm text-slate-100/90 bg-white/12 hover:bg-white/18 border border-white/10 backdrop-blur-xl transition-colors"
+              className="h-9 px-3 rounded-lg text-left text-xs text-slate-100/90 bg-white/10 hover:bg-white/16 border border-white/10 backdrop-blur-xl transition-colors"
             >
               {link}
             </button>
@@ -130,9 +130,9 @@ const Navbar = ({ onAction, activeSection }: { onAction: (action: string) => voi
 
         <button
           onClick={() => onAction('careers')}
-          className="h-11 px-5 md:px-7 rounded-xl bg-[#f3ef2a] text-[#0b1220] text-sm font-medium tracking-wide hover:bg-[#fff45a] transition-colors shadow-[0_8px_24px_rgba(243,239,42,0.25)] whitespace-nowrap"
+          className="h-9 px-4 md:px-5 rounded-lg bg-[#f3ef2a] text-[#0b1220] text-xs font-medium tracking-wide hover:bg-[#fff45a] transition-colors shadow-[0_6px_18px_rgba(243,239,42,0.25)] whitespace-nowrap"
         >
-          Get in touch
+          Contact
         </button>
       </div>
     </motion.nav>
@@ -476,12 +476,12 @@ export default function App() {
 
   const sections = [
     {
-      title: "Technology",
-      subtitle: "Kellogg Precision integrates advanced power electronics, intelligent control systems, and manufacturing software into one resilient technology stack.",
+      title: "Technology 科技",
+      subtitle: "Kellogg Precision 将先进电力电子、智能控制与制造软件融合为一个 resilient technology stack。",
       bgImage: "https://images.unsplash.com/photo-1562408590-e32931084e23?q=80&w=2070&auto=format&fit=crop",
       buttons: [
-        { text: "Explore Technology", variant: "accent", icon: "arrow-right" },
-        { text: "Get in Touch", primary: true }
+        { text: "Explore", variant: "accent", icon: "arrow-right" },
+        { text: "Contact", primary: true }
       ]
     }
   ];

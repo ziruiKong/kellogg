@@ -8,8 +8,8 @@ const showcaseItems = [
     subtitle: '智能终端与边缘计算',
     bgImage: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070&auto=format&fit=crop',
     buttons: [
-      { text: '了解更多', primary: true },
-      { text: '联系销售', primary: false }
+      { text: '探索', primary: true },
+      { text: '联系', primary: false }
     ]
   },
   {
@@ -17,23 +17,23 @@ const showcaseItems = [
     subtitle: '核心计算与系统级封装',
     bgImage: 'https://images.unsplash.com/photo-1535223289827-42f1e9919769?q=80&w=2070&auto=format&fit=crop',
     buttons: [
-      { text: '查看架构', primary: true },
-      { text: '立即订购', primary: false }
+      { text: '架构', primary: true },
+      { text: '订购', primary: false }
     ]
   },
   {
     title: '机械系统',
     subtitle: '航天级公差与自动化',
     bgImage: 'https://images.unsplash.com/photo-1565043589221-1a6fd9ae45c7?q=80&w=2070&auto=format&fit=crop',
-    buttons: [{ text: '探索系统', primary: true }]
+    buttons: [{ text: '系统', primary: true }]
   },
   {
     title: '威龙精密腕表',
     subtitle: '工业钟表学的极致哲学',
     bgImage: 'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?q=80&w=2080&auto=format&fit=crop',
     buttons: [
-      { text: '探索系列', primary: true },
-      { text: '精品店', primary: false }
+      { text: '系列', primary: true },
+      { text: '门店', primary: false }
     ]
   }
 ];
@@ -97,7 +97,7 @@ export const HorizontalShowcase = ({ index, setActiveSection }: { index: number,
               transition={{ delay: 0.2, duration: 0.9 }}
               className="px-6 py-2 rounded-full border border-slate-200/20 bg-slate-200/5 text-slate-200/80 text-xs tracking-[0.22em] uppercase mb-7"
             >
-              Key Capability Track
+              Capability 能力
             </motion.div>
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
