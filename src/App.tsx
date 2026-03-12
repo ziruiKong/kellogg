@@ -4,6 +4,7 @@ import { ChevronDown, Globe, Headphones, Menu as MenuIcon, Briefcase, X, ArrowRi
 import Lenis from 'lenis';
 import { HQMap } from './components/HQMap';
 import { HorizontalShowcase } from './components/HorizontalShowcase';
+import kelloggLogo from './assets/kellogg-logo.svg';
 
 const JOBS = [
   {
@@ -45,24 +46,13 @@ const JOBS = [
 ];
 
 const Logo = ({ className = "" }: { className?: string }) => (
-  <div className={`flex items-center gap-3 md:gap-4 ${className} text-white`}>
-    <svg viewBox="0 0 120 100" className="h-8 md:h-10 w-auto" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="silver-grad" x1="0%" y1="100%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#9ca3af" />
-          <stop offset="50%" stopColor="#e5e7eb" />
-          <stop offset="100%" stopColor="#ffffff" />
-        </linearGradient>
-      </defs>
-      <path d="M 10 15 H 30 V 65 L 10 85 Z" />
-      <path d="M 40 55 L 80 15 H 110 L 70 55 Z" fill="url(#silver-grad)" />
-      <path d="M 40 55 L 70 55 L 110 95 H 80 Z" />
-    </svg>
-    <div className="flex flex-col justify-center">
-      <span className="text-2xl md:text-3xl font-serif font-light tracking-[0.15em] leading-none uppercase">Kellogg</span>
-      <span className="text-[0.65rem] md:text-[0.75rem] font-normal tracking-[0.35em] leading-none uppercase text-white/70 mt-1.5">Precision</span>
-    </div>
-  </div>
+  <img
+    src={kelloggLogo}
+    alt="Kellogg Precision"
+    className={`h-8 md:h-10 w-auto object-contain ${className}`}
+    loading="eager"
+    decoding="async"
+  />
 );
 
 const CustomCursor = () => {
