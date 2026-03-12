@@ -515,7 +515,13 @@ export default function App() {
   ];
 
   return (
-    <div className="min-h-screen w-full bg-[#02050b] font-sans selection:bg-slate-200 selection:text-[#0a1730] cursor-none">
+    <div className="relative min-h-screen w-full bg-[#02050b] font-sans selection:bg-slate-200 selection:text-[#0a1730] cursor-none overflow-x-hidden">
+      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+        <div className="absolute -top-36 -left-24 w-[34rem] h-[34rem] rounded-full bg-[#0b2a56]/35 blur-[130px] app-orb" />
+        <div className="absolute top-[28%] -right-36 w-[36rem] h-[36rem] rounded-full bg-slate-200/10 blur-[140px] app-orb app-orb--slow" />
+        <div className="absolute inset-0 app-grid" />
+        <div className="absolute inset-0 app-noise" />
+      </div>
       <CustomCursor />
       <Navbar onAction={setActiveModal} activeSection={activeSection} />
       <SideIndicator total={4} current={activeSection} />

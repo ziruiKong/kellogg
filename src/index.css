@@ -15,3 +15,36 @@
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+@keyframes ambientFloat {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(0, -22px, 0) scale(1.04); }
+}
+
+@keyframes ambientDrift {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-120px, -80px, 0); }
+}
+
+.app-orb {
+  animation: ambientFloat 10s ease-in-out infinite;
+  will-change: transform;
+}
+
+.app-orb--slow {
+  animation-duration: 16s;
+}
+
+.app-noise {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.04) 0.7px, transparent 0.7px);
+  background-size: 3px 3px;
+  opacity: 0.18;
+}
+
+.app-grid {
+  background-image:
+    linear-gradient(rgba(148, 163, 184, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
+  background-size: 64px 64px;
+  animation: ambientDrift 24s linear infinite alternate;
+}

@@ -117,25 +117,25 @@ export const HQMap = ({ setActiveSection, index }: { setActiveSection: (i: numbe
       // Draw Ocean/Globe Background
       context.beginPath();
       context.arc(width / 2, height / 2, scaleRef.current, 0, 2 * Math.PI);
-      context.fillStyle = 'rgba(5, 10, 20, 0.6)';
+      context.fillStyle = 'rgba(4, 12, 26, 0.72)';
       context.fill();
-      context.strokeStyle = 'rgba(0, 255, 255, 0.2)';
+      context.strokeStyle = 'rgba(191, 219, 254, 0.28)';
       context.lineWidth = 1;
       context.stroke();
 
       // Draw Graticule
       context.beginPath();
       path(graticule);
-      context.strokeStyle = 'rgba(0, 255, 255, 0.05)';
+      context.strokeStyle = 'rgba(191, 219, 254, 0.08)';
       context.lineWidth = 0.5;
       context.stroke();
 
       // Draw Countries
       context.beginPath();
       path(worldData);
-      context.fillStyle = 'rgba(10, 25, 40, 0.8)';
+      context.fillStyle = 'rgba(7, 28, 60, 0.82)';
       context.fill();
-      context.strokeStyle = 'rgba(0, 255, 255, 0.3)';
+      context.strokeStyle = 'rgba(203, 213, 225, 0.38)';
       context.lineWidth = 1;
       context.stroke();
 
@@ -293,12 +293,12 @@ export const HQMap = ({ setActiveSection, index }: { setActiveSection: (i: numbe
       ref={sectionRef}
       onViewportEnter={() => setActiveSection(index)}
       viewport={{ amount: 0.5 }}
-      className="h-screen w-full relative flex items-center justify-center overflow-hidden bg-black"
+      className="h-screen w-full relative flex items-center justify-center overflow-hidden bg-[#02050b]"
     >
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full cursor-crosshair" />
       
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#01030a] via-transparent to-[#01030a] pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#02050b]/85 via-transparent to-transparent pointer-events-none" />
       
       <motion.div 
         style={{ opacity: opacityContent, y: yContent }}
@@ -308,7 +308,7 @@ export const HQMap = ({ setActiveSection, index }: { setActiveSection: (i: numbe
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-5xl md:text-7xl font-serif font-light tracking-tight text-white mb-4 drop-shadow-lg"
+          className="text-5xl md:text-7xl font-serif font-light tracking-tight text-slate-100 mb-4 drop-shadow-lg"
         >
           全球布局
         </motion.h2>
@@ -316,13 +316,13 @@ export const HQMap = ({ setActiveSection, index }: { setActiveSection: (i: numbe
           initial={{ opacity: 0, scaleX: 0 }}
           whileInView={{ opacity: 1, scaleX: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="w-12 h-[1px] bg-white/50 mb-8 origin-left" 
+          className="w-12 h-[1px] bg-slate-300/70 mb-8 origin-left" 
         />
         <motion.p 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-white/70 max-w-md text-base md:text-lg font-light tracking-wide leading-relaxed mb-10"
+          className="text-slate-300/85 max-w-md text-base md:text-lg font-light tracking-wide leading-relaxed mb-10"
         >
           我们的精密制造网络遍布全球，以美国哥伦布（Columbus）总部为核心，并在伦敦、东京、上海等七大洲15个重要枢纽城市设立地区分部，为您提供无缝衔接的工程支持与供应链保障。
         </motion.p>
@@ -334,17 +334,17 @@ export const HQMap = ({ setActiveSection, index }: { setActiveSection: (i: numbe
           className="pointer-events-auto relative mt-4"
         >
           <div className="flex items-center gap-3">
-            <div className="flex items-center bg-transparent border border-white/30 rounded-full shadow-[0_0_20px_rgba(0,0,0,0.5)] backdrop-blur-md overflow-hidden">
+            <div className="flex items-center bg-slate-200/8 border border-slate-200/30 rounded-full shadow-[0_0_20px_rgba(0,0,0,0.5)] backdrop-blur-md overflow-hidden">
               <button 
                 onClick={handlePrev}
-                className="p-3 text-white/70 hover:text-white hover:bg-white/10 transition-colors border-r border-white/10"
+                className="p-3 text-slate-300 hover:text-slate-100 hover:bg-slate-200/15 transition-colors border-r border-slate-200/20"
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
               
-              <div className="flex items-center justify-center w-48 px-4 py-3 text-white text-[14px] font-medium tracking-wide">
+              <div className="flex items-center justify-center w-48 px-4 py-3 text-slate-100 text-[14px] font-medium tracking-wide">
                 <span className="flex items-center gap-2 truncate">
-                  <Crosshair className={`w-4 h-4 flex-shrink-0 ${activeLocState?.id === 'hq' ? 'text-white' : 'text-white/70'}`} />
+                  <Crosshair className={`w-4 h-4 flex-shrink-0 ${activeLocState?.id === 'hq' ? 'text-slate-100' : 'text-slate-300/80'}`} />
                   <span className="truncate">
                     {activeLocState ? `${activeLocState.zh} ${activeLocState.en}` : '选择定位城市...'}
                   </span>
@@ -353,7 +353,7 @@ export const HQMap = ({ setActiveSection, index }: { setActiveSection: (i: numbe
 
               <button 
                 onClick={handleNext}
-                className="p-3 text-white/70 hover:text-white hover:bg-white/10 transition-colors border-l border-white/10"
+                className="p-3 text-slate-300 hover:text-slate-100 hover:bg-slate-200/15 transition-colors border-l border-slate-200/20"
               >
                 <ChevronRight className="w-5 h-5" />
               </button>
@@ -366,7 +366,7 @@ export const HQMap = ({ setActiveSection, index }: { setActiveSection: (i: numbe
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
                   onClick={handleReset}
-                  className="flex items-center justify-center px-4 py-3 bg-transparent hover:bg-white/10 text-white text-sm font-medium rounded-full backdrop-blur-md transition-all border border-white/30 h-full"
+                  className="flex items-center justify-center px-4 py-3 bg-slate-200/8 hover:bg-slate-200/20 text-slate-100 text-sm font-medium rounded-full backdrop-blur-md transition-all border border-slate-200/30 h-full"
                   title="恢复全局视角"
                 >
                   <RotateCcw className="w-4 h-4" />
