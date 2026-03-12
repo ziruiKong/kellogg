@@ -45,11 +45,11 @@ const JOBS = [
   }
 ];
 
-const Logo = ({ className = "" }: { className?: string }) => (
+const Logo = ({ className = "", isLight = false }: { className?: string, isLight?: boolean }) => (
   <img
     src={kelloggLogo}
     alt="Kellogg Precision"
-    className={`h-8 md:h-10 w-auto object-contain ${className}`}
+    className={`h-8 md:h-10 w-auto object-contain ${isLight ? 'brightness-0 invert' : ''} ${className}`}
     loading="eager"
     decoding="async"
   />
@@ -98,6 +98,9 @@ const CustomCursor = () => {
 const Navbar = ({ onAction, activeSection }: { onAction: (action: string) => void, activeSection: number }) => {
   const navLinks = ['电子制造', '半导体', '机械系统', '精密腕表'];
   const isScrolled = activeSection > 0;
+  const textTone = isScrolled ? 'text-slate-100 hover:text-white' : 'text-slate-700 hover:text-[#0a1730]';
+  const underlineTone = isScrolled ? 'bg-white/70' : 'bg-slate-500/60';
+  const dividerTone = isScrolled ? 'bg-white/40' : 'bg-slate-400/45';
 
   return (
     <motion.nav 
@@ -105,23 +108,23 @@ const Navbar = ({ onAction, activeSection }: { onAction: (action: string) => voi
       animate={{ y: 0 }}
       transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
       className={`fixed top-0 w-full z-50 px-6 md:px-10 py-4 flex items-center justify-between transition-all duration-700 ${
-        isScrolled 
-          ? 'bg-white/95 backdrop-blur-xl border-b border-slate-300/50 shadow-[0_4px_18px_rgba(2,5,11,0.08)]' 
+        isScrolled
+          ? 'bg-transparent backdrop-blur-none border-transparent shadow-none'
           : 'bg-white/90 backdrop-blur-xl border-b border-slate-300/40 shadow-[0_4px_18px_rgba(2,5,11,0.08)]'
       }`}
     >
       <div className="flex-1 flex items-center">
-        <Logo className="scale-75 md:scale-90 origin-left" />
+        <Logo isLight={isScrolled} className="scale-75 md:scale-90 origin-left" />
       </div>
       
       <ul className="hidden lg:flex items-center justify-center gap-10 flex-1">
         {navLinks.map((link, i) => (
           <li 
             key={i} 
-            className="cursor-pointer text-[12px] font-medium tracking-[0.2em] text-slate-700 hover:text-[#0a1730] transition-colors duration-500 relative group py-2"
+            className={`cursor-pointer text-[12px] font-medium tracking-[0.2em] transition-colors duration-500 relative group py-2 ${textTone}`}
           >
             {link}
-            <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] bg-slate-500/60 transition-all duration-500 group-hover:w-full" />
+            <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] transition-all duration-500 group-hover:w-full ${underlineTone}`} />
           </li>
         ))}
       </ul>
@@ -129,7 +132,7 @@ const Navbar = ({ onAction, activeSection }: { onAction: (action: string) => voi
       <div className="flex-1 flex justify-end items-center gap-4 md:gap-6">
         <button 
           onClick={() => onAction('support')}
-          className="hidden md:flex items-center justify-center w-8 h-8 text-slate-700 hover:text-[#0a1730] transition-colors duration-300"
+          className={`hidden md:flex items-center justify-center w-8 h-8 transition-colors duration-300 ${textTone}`}
           title="技术支持"
         >
           <Headphones className="w-4 h-4" strokeWidth={1.5} />
@@ -137,7 +140,7 @@ const Navbar = ({ onAction, activeSection }: { onAction: (action: string) => voi
         
         <button 
           onClick={() => onAction('language')}
-          className="hidden md:flex items-center justify-center w-8 h-8 text-slate-700 hover:text-[#0a1730] transition-colors duration-300"
+          className={`hidden md:flex items-center justify-center w-8 h-8 transition-colors duration-300 ${textTone}`}
           title="语言选择"
         >
           <Globe className="w-4 h-4" strokeWidth={1.5} />
@@ -145,16 +148,16 @@ const Navbar = ({ onAction, activeSection }: { onAction: (action: string) => voi
 
         <button 
           onClick={() => onAction('careers')}
-          className="hidden md:flex items-center gap-2 text-[12px] font-medium tracking-[0.15em] text-slate-700 hover:text-[#0a1730] transition-colors duration-300 uppercase"
+          className={`hidden md:flex items-center gap-2 text-[12px] font-medium tracking-[0.15em] transition-colors duration-300 uppercase ${textTone}`}
         >
           加入我们
         </button>
         
-        <div className="w-[1px] h-4 bg-slate-400/45 hidden md:block mx-1" />
+        <div className={`w-[1px] h-4 hidden md:block mx-1 ${dividerTone}`} />
 
         <button 
           onClick={() => onAction('menu')}
-          className="group flex items-center gap-3 text-[12px] font-medium tracking-[0.2em] text-slate-800 hover:text-[#0a1730] transition-colors duration-500 uppercase"
+          className={`group flex items-center gap-3 text-[12px] font-medium tracking-[0.2em] transition-colors duration-500 uppercase ${textTone}`}
         >
           <span className="hidden sm:inline">菜单</span>
           <div className="flex flex-col gap-1.5 items-end">
