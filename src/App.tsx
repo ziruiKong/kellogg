@@ -1,6 +1,7 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'motion/react';
 import { ChevronDown, Globe, Headphones, Menu as MenuIcon, Briefcase, X, ArrowRight } from 'lucide-react';
+import Lenis from 'lenis';
 import { HQMap } from './components/HQMap';
 import { HorizontalShowcase } from './components/HorizontalShowcase';
 
@@ -58,11 +59,51 @@ const Logo = ({ className = "" }: { className?: string }) => (
       <path d="M 40 55 L 70 55 L 110 95 H 80 Z" />
     </svg>
     <div className="flex flex-col justify-center">
-      <span className="text-xl md:text-2xl font-bold tracking-[0.2em] leading-none uppercase">Kellogg</span>
-      <span className="text-[0.65rem] md:text-[0.75rem] font-normal tracking-[0.35em] leading-none uppercase text-white/70 mt-1">Precision</span>
+      <span className="text-2xl md:text-3xl font-serif font-light tracking-[0.15em] leading-none uppercase">Kellogg</span>
+      <span className="text-[0.65rem] md:text-[0.75rem] font-normal tracking-[0.35em] leading-none uppercase text-white/70 mt-1.5">Precision</span>
     </div>
   </div>
 );
+
+const CustomCursor = () => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = useState(false);
+
+  useEffect(() => {
+    const updateMousePosition = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+
+    const handleMouseOver = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.tagName.toLowerCase() === 'button' || target.tagName.toLowerCase() === 'a' || target.closest('button') || target.closest('a')) {
+        setIsHovering(true);
+      } else {
+        setIsHovering(false);
+      }
+    };
+
+    window.addEventListener('mousemove', updateMousePosition);
+    window.addEventListener('mouseover', handleMouseOver);
+
+    return () => {
+      window.removeEventListener('mousemove', updateMousePosition);
+      window.removeEventListener('mouseover', handleMouseOver);
+    };
+  }, []);
+
+  return (
+    <motion.div
+      className="fixed top-0 left-0 w-4 h-4 rounded-full bg-white mix-blend-difference pointer-events-none z-[9999] flex items-center justify-center"
+      animate={{
+        x: mousePosition.x - 8,
+        y: mousePosition.y - 8,
+        scale: isHovering ? 3 : 1,
+      }}
+      transition={{ type: 'spring', stiffness: 500, damping: 28, mass: 0.5 }}
+    />
+  );
+};
 
 const Navbar = ({ onAction, activeSection }: { onAction: (action: string) => void, activeSection: number }) => {
   const navLinks = ['电子制造', '半导体', '机械系统', '精密腕表'];
@@ -76,7 +117,7 @@ const Navbar = ({ onAction, activeSection }: { onAction: (action: string) => voi
       className={`fixed top-0 w-full z-50 px-6 md:px-10 py-4 flex items-center justify-between transition-all duration-700 ${
         isScrolled 
           ? 'bg-transparent backdrop-blur-none border-transparent' 
-          : 'bg-[#050A14]/60 backdrop-blur-xl border-b border-white/5'
+          : 'bg-black/60 backdrop-blur-xl border-b border-white/5'
       }`}
     >
       <div className="flex-1 flex items-center">
@@ -153,11 +194,10 @@ const SideIndicator = ({ total, current }: { total: number, current: number }) =
   </div>
 );
 
-const Section = ({ title, subtitle, bgImage, buttons, isFirst, index, setActiveSection, scrollContainerRef }: any) => {
+const Section = ({ title, subtitle, bgImage, buttons, isFirst, index, setActiveSection }: any) => {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    container: scrollContainerRef,
     offset: ["start end", "end start"]
   });
 
@@ -200,8 +240,8 @@ const Section = ({ title, subtitle, bgImage, buttons, isFirst, index, setActiveS
     <motion.section 
       ref={ref}
       onViewportEnter={() => setActiveSection(index)}
-      viewport={{ amount: 0.5, root: scrollContainerRef }}
-      className={`h-screen w-full snap-start snap-always relative flex flex-col ${isFirst ? 'items-start justify-center px-10 md:px-24' : 'items-center justify-between pt-[18vh] pb-12'} overflow-hidden`}
+      viewport={{ amount: 0.5 }}
+      className={`h-screen w-full relative flex flex-col ${isFirst ? 'items-start justify-center px-10 md:px-24' : 'items-center justify-between pt-[18vh] pb-12'} overflow-hidden`}
     >
       {/* Background with Cinematic Scale */}
       <div className="absolute inset-0 z-0 overflow-hidden bg-black">
@@ -227,19 +267,19 @@ const Section = ({ title, subtitle, bgImage, buttons, isFirst, index, setActiveS
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ amount: 0.5, once: isFirst, root: scrollContainerRef }}
+          viewport={{ amount: 0.5, once: isFirst }}
           className={`relative z-10 text-white ${isFirst ? 'text-left max-w-4xl' : 'text-center px-4 mx-auto'}`}
         >
-          <motion.h1 variants={itemVariants} className={`${isFirst ? 'text-5xl md:text-7xl lg:text-[80px] font-bold tracking-tight leading-tight' : 'text-4xl md:text-[44px] font-medium tracking-[0.1em]'} mb-3 drop-shadow-lg`}>
+          <motion.h1 variants={itemVariants} className={`${isFirst ? 'text-6xl md:text-8xl lg:text-[100px] font-serif font-light tracking-tight leading-[1.1]' : 'text-5xl md:text-[56px] font-serif font-light tracking-tight'} mb-4 drop-shadow-lg`}>
             {title}
           </motion.h1>
           
           {isFirst && (
-            <motion.div variants={itemVariants} className="w-16 h-1 bg-[#e63946] mb-6 mt-4" />
+            <motion.div variants={itemVariants} className="w-12 h-[1px] bg-white/50 mb-8 mt-6" />
           )}
 
           {subtitle && (
-            <motion.p variants={itemVariants} className={`${isFirst ? 'text-lg md:text-2xl font-light tracking-wide' : 'text-[14px] md:text-[15px] font-normal tracking-wide'} text-white/90 drop-shadow-md`}>
+            <motion.p variants={itemVariants} className={`${isFirst ? 'text-xl md:text-3xl font-light tracking-wide text-white/80' : 'text-[15px] md:text-[17px] font-light tracking-wide text-white/70'} drop-shadow-md`}>
               {subtitle}
             </motion.p>
           )}
@@ -251,7 +291,7 @@ const Section = ({ title, subtitle, bgImage, buttons, isFirst, index, setActiveS
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ amount: 0.5, once: isFirst, root: scrollContainerRef }}
+            viewport={{ amount: 0.5, once: isFirst }}
             className={`flex flex-col md:flex-row gap-4 md:gap-6 w-full ${isFirst ? 'max-w-md' : 'max-w-md md:max-w-2xl justify-center'}`}
           >
             {buttons.map((btn: any, i: number) => (
@@ -261,12 +301,12 @@ const Section = ({ title, subtitle, bgImage, buttons, isFirst, index, setActiveS
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                className={`relative overflow-hidden group flex items-center justify-center gap-2 ${isFirst ? 'w-auto py-3 px-8' : 'w-full md:w-64 py-2.5 px-4'} rounded-sm text-[15px] font-medium tracking-wide backdrop-blur-sm transition-all duration-300 ${
+                className={`relative overflow-hidden group flex items-center justify-center gap-2 ${isFirst ? 'w-auto py-3 px-8' : 'w-full md:w-64 py-2.5 px-4'} rounded-full text-[14px] font-medium tracking-[0.1em] uppercase backdrop-blur-sm transition-all duration-300 ${
                   btn.variant === 'red'
-                    ? 'bg-[#e63946] text-white hover:bg-[#d62828] shadow-[0_0_20px_rgba(230,57,70,0.3)]'
+                    ? 'bg-white text-black hover:bg-gray-200'
                     : btn.primary 
-                      ? 'bg-[#f4f4f4] text-[#393c41] shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.25)] hover:bg-white' 
-                      : 'bg-[#171a20]/65 text-white border border-white/5 hover:border-white/20 hover:bg-[#171a20]/80'
+                      ? 'bg-transparent text-white border border-white/30 hover:bg-white hover:text-black' 
+                      : 'bg-transparent text-white border border-white/10 hover:border-white/40 hover:bg-white/5'
                 }`}
               >
                 <span className="relative z-10">{btn.text}</span>
@@ -299,12 +339,11 @@ const Section = ({ title, subtitle, bgImage, buttons, isFirst, index, setActiveS
   );
 };
 
-const NewsSection = ({ index, setActiveSection, scrollContainerRef }: { index: number, setActiveSection: (i: number) => void, scrollContainerRef: any }) => {
+const NewsSection = ({ index, setActiveSection }: { index: number, setActiveSection: (i: number) => void }) => {
   const [selectedNews, setSelectedNews] = useState<number | null>(null);
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    container: scrollContainerRef,
     offset: ["start end", "end start"]
   });
 
@@ -342,8 +381,8 @@ const NewsSection = ({ index, setActiveSection, scrollContainerRef }: { index: n
     <motion.section
       ref={ref}
       onViewportEnter={() => setActiveSection(index)}
-      viewport={{ amount: 0.5, root: scrollContainerRef }}
-      className="h-screen w-full snap-start snap-always relative flex flex-col items-center justify-center pt-[10vh] pb-12 overflow-hidden bg-[#0A1526]"
+      viewport={{ amount: 0.5 }}
+      className="min-h-screen w-full relative flex flex-col items-center justify-center pt-[10vh] pb-12 overflow-hidden bg-black"
     >
       <motion.div 
         style={{ opacity: opacityContent, y: yContent }}
@@ -352,9 +391,9 @@ const NewsSection = ({ index, setActiveSection, scrollContainerRef }: { index: n
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-white/10 pb-3 mb-8 gap-4">
           <div className="flex items-end gap-8">
-            <h2 className="text-3xl md:text-4xl font-bold text-white tracking-wider">最新消息</h2>
+            <h2 className="text-4xl md:text-5xl font-serif font-light text-white tracking-tight">最新消息</h2>
             <div className="flex gap-2 text-sm font-medium mb-1">
-              <button className="bg-[#E63946] text-white px-6 py-1.5">新闻</button>
+              <button className="bg-white/10 text-white px-6 py-1.5 rounded-full hover:bg-white/20 transition-colors">新闻</button>
               <button className="text-white/60 hover:text-white px-6 py-1.5 transition-colors">活动</button>
             </div>
           </div>
@@ -378,10 +417,10 @@ const NewsSection = ({ index, setActiveSection, scrollContainerRef }: { index: n
               <div className="overflow-hidden relative aspect-[16/9] mb-4 bg-white/5">
                 <img src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
               </div>
-              <h3 className="text-white font-medium text-lg leading-snug group-hover:text-[#8AB4F8] transition-colors line-clamp-2 mb-3">
+              <h3 className="text-white font-medium text-lg leading-snug group-hover:text-white/80 transition-colors line-clamp-2 mb-3">
                 {item.title}
               </h3>
-              <p className="text-[#6B8EAD] text-sm mt-auto">
+              <p className="text-white/50 text-sm mt-auto">
                 {item.date}
               </p>
             </motion.div>
@@ -417,19 +456,19 @@ const NewsSection = ({ index, setActiveSection, scrollContainerRef }: { index: n
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-3xl bg-[#0A1526] border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]"
+              className="relative w-full max-w-3xl bg-[#0a0a0a] border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]"
             >
               <button onClick={() => setSelectedNews(null)} className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-black/80 transition-all">
                 <X className="w-5 h-5" strokeWidth={1.5} />
               </button>
               <div className="w-full h-64 md:h-80 relative flex-shrink-0">
                 <img src={news[selectedNews].image} alt={news[selectedNews].title} className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0A1526] via-[#0A1526]/50 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/50 to-transparent" />
               </div>
               <div className="p-8 md:p-10 overflow-y-auto no-scrollbar -mt-32 relative z-10">
-                <span className="text-[#8AB4F8] text-sm font-medium mb-3 block">{news[selectedNews].date}</span>
-                <h2 className="text-2xl md:text-3xl font-bold text-white leading-snug mb-6">{news[selectedNews].title}</h2>
-                <div className="text-white/80 leading-relaxed space-y-4 text-sm md:text-base">
+                <span className="text-white/60 text-sm font-medium mb-3 block">{news[selectedNews].date}</span>
+                <h2 className="text-3xl md:text-4xl font-serif font-light text-white leading-snug mb-6">{news[selectedNews].title}</h2>
+                <div className="text-white/80 leading-relaxed space-y-4 text-base md:text-lg font-light">
                   <p>{news[selectedNews].content}</p>
                 </div>
               </div>
@@ -444,7 +483,29 @@ const NewsSection = ({ index, setActiveSection, scrollContainerRef }: { index: n
 export default function App() {
   const [activeSection, setActiveSection] = useState(0);
   const [activeModal, setActiveModal] = useState<string | null>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 2,
+    });
+
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
 
   const sections = [
     {
@@ -458,7 +519,8 @@ export default function App() {
   ];
 
   return (
-    <div ref={scrollRef} className="h-screen w-full overflow-y-auto snap-y snap-mandatory no-scrollbar bg-black font-sans selection:bg-white selection:text-black">
+    <div className="min-h-screen w-full bg-black font-sans selection:bg-white selection:text-black cursor-none">
+      <CustomCursor />
       <Navbar onAction={setActiveModal} activeSection={activeSection} />
       <SideIndicator total={4} current={activeSection} />
       {sections.map((section, index) => (
@@ -466,14 +528,13 @@ export default function App() {
           key={index}
           index={index}
           setActiveSection={setActiveSection}
-          scrollContainerRef={scrollRef}
           {...section}
           isFirst={index === 0}
         />
       ))}
-      <HorizontalShowcase index={1} setActiveSection={setActiveSection} scrollContainerRef={scrollRef} />
-      <HQMap index={2} setActiveSection={setActiveSection} scrollContainerRef={scrollRef} />
-      <NewsSection index={3} setActiveSection={setActiveSection} scrollContainerRef={scrollRef} />
+      <HorizontalShowcase index={1} setActiveSection={setActiveSection} />
+      <HQMap index={2} setActiveSection={setActiveSection} />
+      <NewsSection index={3} setActiveSection={setActiveSection} />
 
       <AnimatePresence>
         {activeModal && (
@@ -492,7 +553,7 @@ export default function App() {
                 animate={{ x: 0 }}
                 exit={{ x: '100%' }}
                 transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                className="absolute right-0 top-0 bottom-0 w-full md:w-[400px] bg-[#111] border-l border-white/10 p-8 flex flex-col"
+                className="absolute right-0 top-0 bottom-0 w-full md:w-[400px] bg-[#0a0a0a] border-l border-white/10 p-8 flex flex-col"
               >
                 <div className="flex justify-end">
                   <button onClick={() => setActiveModal(null)} className="text-white/70 hover:text-white transition-colors">
@@ -500,9 +561,9 @@ export default function App() {
                   </button>
                 </div>
                 <div className="mt-12 flex flex-col gap-6 text-white">
-                  <h2 className="text-2xl font-medium tracking-wider mb-4">导航</h2>
+                  <h2 className="text-3xl font-serif font-light tracking-tight mb-4">导航</h2>
                   {['电子制造', '半导体', '机械系统', '精密腕表', '投资者关系', '新闻资讯', '招贤纳士'].map(item => (
-                    <a key={item} href="#" className="text-lg font-light hover:text-white/70 transition-colors">{item}</a>
+                    <a key={item} href="#" className="text-xl font-light hover:text-white/70 transition-colors">{item}</a>
                   ))}
                 </div>
               </motion.div>
@@ -518,8 +579,8 @@ export default function App() {
               >
                 <div className="flex-none p-8 md:px-12 md:py-10 border-b border-white/10 flex justify-between items-center bg-white/[0.02]">
                   <div>
-                    <h2 className="text-3xl md:text-4xl font-medium tracking-wider mb-2">加入凯洛格精密</h2>
-                    <p className="text-white/60 text-sm md:text-base tracking-wide">与我们共同塑造制造与工程的未来。</p>
+                    <h2 className="text-4xl md:text-5xl font-serif font-light tracking-tight mb-2">加入凯洛格精密</h2>
+                    <p className="text-white/60 text-base md:text-lg font-light tracking-wide">与我们共同塑造制造与工程的未来。</p>
                   </div>
                   <button onClick={() => setActiveModal(null)} className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-all">
                     <X className="w-5 h-5" strokeWidth={1.5} />
@@ -593,7 +654,7 @@ export default function App() {
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                className="relative w-full max-w-md bg-[#111]/90 backdrop-blur-xl border border-white/10 p-8 rounded-2xl shadow-2xl text-white mx-4"
+                className="relative w-full max-w-md bg-[#0a0a0a]/90 backdrop-blur-xl border border-white/10 p-8 rounded-2xl shadow-2xl text-white mx-4"
               >
                 <button onClick={() => setActiveModal(null)} className="absolute top-6 right-6 text-white/70 hover:text-white transition-colors">
                   <X className="w-5 h-5" strokeWidth={1.5} />

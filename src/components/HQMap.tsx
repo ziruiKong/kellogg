@@ -26,12 +26,11 @@ const BRANCHES = [
   { id: 'b15', coords: [172.6362, -43.5320], en: 'Christchurch', zh: '克赖斯特彻奇', type: 'Branch' }
 ];
 
-export const HQMap = ({ setActiveSection, index, scrollContainerRef }: { setActiveSection: (i: number) => void, index: number, scrollContainerRef: any }) => {
+export const HQMap = ({ setActiveSection, index }: { setActiveSection: (i: number) => void, index: number }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    container: scrollContainerRef,
     offset: ["start end", "end start"]
   });
 
@@ -157,13 +156,13 @@ export const HQMap = ({ setActiveSection, index, scrollContainerRef }: { setActi
             const pulse = Math.sin(Date.now() / 150) * 4 + 10;
             context.beginPath();
             context.arc(pos[0], pos[1], pulse, 0, 2 * Math.PI);
-            context.fillStyle = 'rgba(0, 255, 255, 0.4)';
+            context.fillStyle = 'rgba(255, 255, 255, 0.2)';
             context.fill();
           }
 
           context.beginPath();
           context.arc(pos[0], pos[1], isActive ? 4 : 2.5, 0, 2 * Math.PI);
-          context.fillStyle = isActive ? '#00ffff' : 'rgba(0, 255, 255, 0.8)';
+          context.fillStyle = isActive ? '#ffffff' : 'rgba(255, 255, 255, 0.5)';
           context.fill();
 
           // Draw labels for branches
@@ -194,12 +193,12 @@ export const HQMap = ({ setActiveSection, index, scrollContainerRef }: { setActi
         
         context.beginPath();
         context.arc(hqPos[0], hqPos[1], pulse, 0, 2 * Math.PI);
-        context.fillStyle = 'rgba(230, 57, 70, 0.4)';
+        context.fillStyle = 'rgba(255, 255, 255, 0.3)';
         context.fill();
 
         context.beginPath();
         context.arc(hqPos[0], hqPos[1], 4, 0, 2 * Math.PI);
-        context.fillStyle = '#e63946';
+        context.fillStyle = '#ffffff';
         context.fill();
         
         context.shadowColor = 'rgba(0,0,0,0.8)';
@@ -293,13 +292,13 @@ export const HQMap = ({ setActiveSection, index, scrollContainerRef }: { setActi
     <motion.section 
       ref={sectionRef}
       onViewportEnter={() => setActiveSection(index)}
-      viewport={{ amount: 0.5, root: scrollContainerRef }}
-      className="h-screen w-full snap-start snap-always relative flex items-center justify-center overflow-hidden bg-[#02050a]"
+      viewport={{ amount: 0.5 }}
+      className="h-screen w-full relative flex items-center justify-center overflow-hidden bg-black"
     >
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full cursor-crosshair" />
       
-      <div className="absolute inset-0 bg-gradient-to-t from-[#02050a] via-transparent to-[#02050a] pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#02050a]/80 via-transparent to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-transparent pointer-events-none" />
       
       <motion.div 
         style={{ opacity: opacityContent, y: yContent }}
@@ -309,7 +308,7 @@ export const HQMap = ({ setActiveSection, index, scrollContainerRef }: { setActi
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-4xl md:text-6xl font-bold tracking-tight text-white mb-4 drop-shadow-lg"
+          className="text-5xl md:text-7xl font-serif font-light tracking-tight text-white mb-4 drop-shadow-lg"
         >
           全球布局
         </motion.h2>
@@ -317,13 +316,13 @@ export const HQMap = ({ setActiveSection, index, scrollContainerRef }: { setActi
           initial={{ opacity: 0, scaleX: 0 }}
           whileInView={{ opacity: 1, scaleX: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="w-16 h-1 bg-[#e63946] mb-6 origin-left" 
+          className="w-12 h-[1px] bg-white/50 mb-8 origin-left" 
         />
         <motion.p 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-white/70 max-w-md text-sm md:text-base leading-relaxed mb-8"
+          className="text-white/70 max-w-md text-base md:text-lg font-light tracking-wide leading-relaxed mb-10"
         >
           我们的精密制造网络遍布全球，以美国哥伦布（Columbus）总部为核心，并在伦敦、东京、上海等七大洲15个重要枢纽城市设立地区分部，为您提供无缝衔接的工程支持与供应链保障。
         </motion.p>
@@ -335,7 +334,7 @@ export const HQMap = ({ setActiveSection, index, scrollContainerRef }: { setActi
           className="pointer-events-auto relative mt-4"
         >
           <div className="flex items-center gap-3">
-            <div className="flex items-center bg-[#111] border border-white/20 rounded-sm shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+            <div className="flex items-center bg-transparent border border-white/30 rounded-full shadow-[0_0_20px_rgba(0,0,0,0.5)] backdrop-blur-md overflow-hidden">
               <button 
                 onClick={handlePrev}
                 className="p-3 text-white/70 hover:text-white hover:bg-white/10 transition-colors border-r border-white/10"
@@ -343,9 +342,9 @@ export const HQMap = ({ setActiveSection, index, scrollContainerRef }: { setActi
                 <ChevronLeft className="w-5 h-5" />
               </button>
               
-              <div className="flex items-center justify-center w-48 px-4 py-3 text-white text-sm font-medium">
+              <div className="flex items-center justify-center w-48 px-4 py-3 text-white text-[14px] font-medium tracking-wide">
                 <span className="flex items-center gap-2 truncate">
-                  <Crosshair className={`w-4 h-4 flex-shrink-0 ${activeLocState?.id === 'hq' ? 'text-[#e63946]' : 'text-[#00ffff]'}`} />
+                  <Crosshair className={`w-4 h-4 flex-shrink-0 ${activeLocState?.id === 'hq' ? 'text-white' : 'text-white/70'}`} />
                   <span className="truncate">
                     {activeLocState ? `${activeLocState.zh} ${activeLocState.en}` : '选择定位城市...'}
                   </span>
@@ -367,7 +366,7 @@ export const HQMap = ({ setActiveSection, index, scrollContainerRef }: { setActi
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
                   onClick={handleReset}
-                  className="flex items-center justify-center px-4 py-3 bg-white/10 hover:bg-white/20 text-white text-sm font-medium rounded-sm backdrop-blur-md transition-all border border-white/10 h-full"
+                  className="flex items-center justify-center px-4 py-3 bg-transparent hover:bg-white/10 text-white text-sm font-medium rounded-full backdrop-blur-md transition-all border border-white/30 h-full"
                   title="恢复全局视角"
                 >
                   <RotateCcw className="w-4 h-4" />

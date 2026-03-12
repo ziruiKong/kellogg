@@ -40,12 +40,11 @@ const showcaseItems = [
   }
 ];
 
-export const HorizontalShowcase = ({ index, setActiveSection, scrollContainerRef }: { index: number, setActiveSection: (i: number) => void, scrollContainerRef: any }) => {
+export const HorizontalShowcase = ({ index, setActiveSection }: { index: number, setActiveSection: (i: number) => void }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    container: scrollContainerRef,
     offset: ["start end", "end start"]
   });
 
@@ -66,8 +65,8 @@ export const HorizontalShowcase = ({ index, setActiveSection, scrollContainerRef
     <motion.section
       ref={ref}
       onViewportEnter={() => setActiveSection(index)}
-      viewport={{ amount: 0.5, root: scrollContainerRef }}
-      className="h-screen w-full snap-start snap-always relative flex items-center justify-center overflow-hidden bg-black"
+      viewport={{ amount: 0.5 }}
+      className="h-screen w-full relative flex items-center justify-center overflow-hidden bg-black"
     >
       <AnimatePresence mode="wait">
         <motion.div
@@ -99,7 +98,7 @@ export const HorizontalShowcase = ({ index, setActiveSection, scrollContainerRef
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.8 }}
-              className="text-4xl md:text-[44px] font-medium tracking-[0.1em] text-white mb-3 drop-shadow-lg"
+              className="text-5xl md:text-[64px] font-serif font-light tracking-tight text-white mb-4 drop-shadow-lg"
             >
               {showcaseItems[currentIndex].title}
             </motion.h2>
@@ -107,7 +106,7 @@ export const HorizontalShowcase = ({ index, setActiveSection, scrollContainerRef
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.8 }}
-              className="text-[14px] md:text-[15px] font-normal tracking-wide text-white/90 mb-10 drop-shadow-md"
+              className="text-lg md:text-xl font-light tracking-wide text-white/80 mb-10 drop-shadow-md"
             >
               {showcaseItems[currentIndex].subtitle}
             </motion.p>
@@ -121,10 +120,10 @@ export const HorizontalShowcase = ({ index, setActiveSection, scrollContainerRef
               {showcaseItems[currentIndex].buttons.map((btn: any, i: number) => (
                 <button
                   key={i}
-                  className={`relative overflow-hidden group w-full md:w-64 py-2.5 px-4 rounded-sm text-[15px] font-medium tracking-wide backdrop-blur-sm transition-all duration-300 ${
+                  className={`relative overflow-hidden group w-full md:w-64 py-2.5 px-4 rounded-full text-[14px] font-medium tracking-[0.1em] uppercase backdrop-blur-sm transition-all duration-300 ${
                     btn.primary
-                      ? 'bg-[#f4f4f4] text-[#393c41] shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.25)] hover:bg-white'
-                      : 'bg-[#171a20]/65 text-white border border-white/5 hover:border-white/20 hover:bg-[#171a20]/80'
+                      ? 'bg-transparent text-white border border-white/30 hover:bg-white hover:text-black'
+                      : 'bg-transparent text-white border border-white/10 hover:border-white/40 hover:bg-white/5'
                   }`}
                 >
                   <span className="relative z-10">{btn.text}</span>
